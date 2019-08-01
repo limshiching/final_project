@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, make_response
 import requests
 import os
 import json
+
 foods_api_blueprint = Blueprint('foods_api',
                              __name__,
                              template_folder='templates')
@@ -36,6 +37,7 @@ def search(item_name):
     #         'unit' : food.calories_unit,
     #         'sugar' : food.sugars
     #     })
+
     nutritionix_id = os.getenv('NUTRITION_APP_ID')
     nutritionix_key = os.getenv('NUTRITION_APP_KEY')
 
