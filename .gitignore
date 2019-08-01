@@ -1,0 +1,6 @@
+.vscode
+*.DS_Store
+*__pycache__
+*.env
+sugartracker_web/static/.webassets-cache
+sugartracker_web/static/gen
