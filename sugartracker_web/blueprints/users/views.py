@@ -37,9 +37,10 @@ def create():
         return redirect(url_for('users.new'))
 
 
-@users_blueprint.route('/<username>', methods=["GET"])
-def show(username):
-    pass
+@users_blueprint.route('/google', methods=["GET"])
+def google:
+    redirect_uri = "http://localhost:5000/sessions/authorize/google"
+    return oauth.google.authorize_redirect(redirect_uri)
 
 
 @users_blueprint.route('/', methods=["GET"])
