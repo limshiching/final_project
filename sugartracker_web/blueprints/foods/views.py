@@ -39,7 +39,7 @@ def show(item_name):
     nutritionix_id = os.getenv('NUTRITION_APP_ID')
     nutritionix_key = os.getenv('NUTRITION_APP_KEY')
 
-    response = requests.get(f'https://api.nutritionix.com/v1_1/search/{item_name}?fields=nf_sugars%2Cnf_calories%2Cnf_calories_from_fat%2Cnf_total_carbohydrate&appId={nutritionix_id}&appKey={nutritionix_key}')
+    response = requests.get(f'https://api.nutritionix.com/v1_1/search/{item_name}?fields=nf_total_fat%2Cnf_saturated_fat%2Cnf_trans_fatty_acid%2Cnf_cholesterol%2Cnf_sodium%2Cnf_sugars%2Cnf_calories%2Cnf_calories_from_fat%2Cnf_total_carbohydrate%2Cnf_dietary_fiber%2Cnf_protein%2Cnf_vitamin_a_dv%2Cnf_vitamin_c_dv%2Cnf_calcium_dv%2Cnf_iron_dv&appId={nutritionix_id}&appKey={nutritionix_key}')
     data=(response.json())
     
     # print(data)
