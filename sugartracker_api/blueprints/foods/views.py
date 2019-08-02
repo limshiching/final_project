@@ -27,16 +27,6 @@ def index():
 
 @foods_api_blueprint.route('/<item_name>', methods=['GET'])
 def search(item_name):
-    # foods = Food.select()
-    # food_list = []
-    # for food in foods:
-    #     food_list.append({
-    #         'id' : food.item_id,
-    #         'brand' : food.brand_name,
-    #         'calories' : food.calories,
-    #         'unit' : food.calories_unit,
-    #         'sugar' : food.sugars
-    #     })
 
     nutritionix_id = os.getenv('NUTRITION_APP_ID')
     nutritionix_key = os.getenv('NUTRITION_APP_KEY')

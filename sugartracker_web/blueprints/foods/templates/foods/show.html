@@ -1,9 +1,13 @@
 {% extends "_layout.html" %}
 {% block content %}
 
-<h1> Food Item : </h1>
-
-
-
+<div class="container">
+    <div class="card-body">
+    <h1> Food Item : {{item_name}} </h1>
+    <h1> Calories : {{data['hits'][0]['fields']['nf_calories']}}  </h1>
+    <h1> Carbohydrates  : {{data['hits'][0]['fields']['nf_total_carbohydrate']}}  </h1>
+    <h1> Sugar : {{data['hits'][0]['fields']['nf_sugars']}} </h1>
+    </div>
+</div>
 
 {% endblock %}
