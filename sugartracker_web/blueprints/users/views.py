@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 from models.user import User
 from flask_login import login_required, current_user
+from sugartracker_web.util.oauth import oauth
 import app
 import os
 
@@ -38,14 +39,21 @@ def create():
 
 
 @users_blueprint.route('/google', methods=["GET"])
-def google:
-    redirect_uri = "http://localhost:5000/sessions/authorize/google"
+def google():
+    redirect_uri = "http://localhost:5000/users/google/login"
     return oauth.google.authorize_redirect(redirect_uri)
 
 
-@users_blueprint.route('/', methods=["GET"])
-def index():
-    return "USERS"
+@users_blueprint.route('/google/login', methods=["GET"])
+def google_login():
+    token = oauth.google.authorize_access_token()
+    profile = oauth.google.get(
+        'https://www.googleapis.com/oauth2/v2/userinfo').json()
+    name =profile['name']
+    email = oauth.google.get(
+        'https://www.googleapis.com/oauth2/v2/userinfo').json()['email']
+    return redirect(url_for('home'))
+     
 
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])
