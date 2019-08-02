@@ -1,21 +1,33 @@
 {% extends "_layout.html" %}
 {% block content %}
 
-<h1 class="text-center">Upload Your Images</h1>
+<h1 class="text-center">Sugar Level of Food</h1>
 
 <div class="container">
-    <div class="row">
-        <div class="d-flex justify-content-center mx-auto">
-
-            <form action="{{ url_for('images.upload') }}" method="POST" enctype="multipart/form-data">
+    
+    <div class="d-flex flex-row justify-content-center">
+        <div class="row">
+            
+            <form action="{{ url_for('images.upload') }}" method="POST" enctype="multipart/form-data" style="border: 1px solid black;">
                 <label for="image">Upload Your Images</label>
-                <br></br>
+                <br />
                 <input type="file" name="user_file" class="mx-auto">
-                <br></br>
-                <button type="submit">Upload</button>
+                <button type="submit" class="btn btn-primary">Upload image</button>
             </form>
 
-            <div style="height: 250px; width: 250px; border: 2px solid; border-color: black;">Preview</div>
+            <div style="border: 1px solid blue">
+                <img src="http://placehold.it/180" alt="your image">    
+            </div>
+
+            <div style="height: 250px; width: 250px; border: 1px solid; border-color: black;" class="text-center">
+                {% for result in results %}
+                <div>
+                    {{result['name']}}
+                {% endfor %}   
+                </div>
+            </div>
+            
+
         </div>
     </div>
 </div>
