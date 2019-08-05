@@ -3,6 +3,11 @@ from flask import render_template
 from sugartracker_web.blueprints.users.views import users_blueprint
 from flask_assets import Environment, Bundle
 from .util.assets import bundles
+import os
+import config
+from sugartracker_web.util.oauth import oauth
+
+oauth.init_app(app)
 
 assets = Environment(app)
 assets.register(bundles)
@@ -21,3 +26,4 @@ def internal_server_error(e):
 @app.route("/")
 def home():
     return render_template('home.html')
+
