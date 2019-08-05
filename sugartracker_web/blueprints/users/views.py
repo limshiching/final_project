@@ -9,7 +9,6 @@ import app
 import os
 
 
-
 users_blueprint = Blueprint('users',
                             __name__,
                             template_folder='templates')

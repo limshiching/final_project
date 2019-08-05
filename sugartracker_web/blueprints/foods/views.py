@@ -34,6 +34,9 @@ def search():
     return redirect(url_for('foods.show', item_name=item_name))
 
 @foods_blueprint.route('/<item_name>', methods=["GET"])
+def search(item_name):
+    pass
+
 def show(item_name):
 
     nutritionix_id = os.getenv('NUTRITION_APP_ID')
