@@ -61,33 +61,33 @@ Saturated Fat <span itemprop="saturatedFatContent"> {{data['hits'][0]['fields'][
 <strong>Total Carbohydrates</strong> <span itemprop="carbohydrateContent"> {{data['hits'][0]['fields']['nf_total_carbohydrate']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
 </span></div>
 <div class="line indent" tabindex="0">
-<div class="dv" aria-hidden="true"><strong></strong>%</div>
-Dietary Fiber <span itemprop="fiberContent"> {{data['hits'][0]['fields']['nf_dietary_fiber']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+Sugars <span itemprop="sugarContent"> {{data['hits'][0]['fields']['nf_sugars']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
 </span></div>
 <div class="line indent" tabindex="0">
-Sugars <span itemprop="sugarContent"> {{data['hits'][0]['fields']['nf_sugars']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+<div class="dv" aria-hidden="true"><strong></strong>%</div>
+Dietary Fiber <span itemprop="fiberContent"> {{data['hits'][0]['fields']['nf_dietary_fiber']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
 </span></div>
 <div class="line" tabindex="0">
 <strong>Protein</strong> <span itemprop="proteinContent"> {{data['hits'][0]['fields']['nf_protein']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span></span></div>
 <div class="bar1"></div>
 <div class="line vitaminA" tabindex="0">
 <div class="dv">
-%</div>
+    {{data['hits'][0]['fields']['nf_vitamin_a_dv']}} %</div>
 Vitamin A
 </div>
 <div class="line vitaminC" tabindex="0">
 <div class="dv">
-%</div>
+    {{data['hits'][0]['fields']['nf_vitamin_c_dv']}} %</div>
 Vitamin C
 </div>
 <div class="line calcium" tabindex="0">
 <div class="dv">
-%</div>
+    {{data['hits'][0]['fields']['nf_calcium_dv']}} %</div>
 Calcium
 </div>
 <div class="line iron" tabindex="0">
 <div class="dv">
-%</div>
+    {{data['hits'][0]['fields']['nf_iron_dv']}} %</div>
 Iron
 </div>
 <div class="dvCalorieDiet line">
@@ -107,7 +107,8 @@ Iron
     </div>
 
     <p> Daily Recommended Sugar Intake Per Day = 25g</p>
-    <p> Current Intake = {nf</p>
+    <p> Sugar Intake For This Meal : {{data['hits'][0]['fields']['nf_sugars']}} g </p>
+    <p> Current Intake For The Day = {nf</p>
 </body>
 
 
