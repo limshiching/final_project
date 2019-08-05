@@ -1,77 +1,78 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                             
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.ico') }}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    {% assets "home_css" %}
-      <link rel="stylesheet" href="{{ ASSET_URL }}">
-    {% endassets %}
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
 
-    {% assets "home_js" %}
-      <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
+  <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.ico') }}">
 
-    {% block header %}{% endblock %}
-    <title>{% block title %}{% endblock %}Sugar Tracker App</title>
-  </head>
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-warning justify-content-between">
-    <a class="navbar-brand" href="{{ url_for('home') }}"><img
-      src="https://i.guim.co.uk/img/static/sys-images/Lifeandhealth/Pix/pictures/2014/1/13/1389628019128/Sugar-008.jpg?width=300&quality=85&auto=format&fit=max&s=c4020c59df731c9ce9114453c2c3bf8f"
-      width="30px" height="30px" alt="sugar tracker logo" />Sugar Tracker App</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+  {% block header %}{% endblock %}
+  <title>{% block title %}{% endblock %}Sugartracker</title>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">SugarCombat</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="container">  
-    <div class="collapse navbar-collapse " id="navbarSupportedContent">
-      <ul class="navbar-nav mx-auto">
-          <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-      </ul>
-      <ul class="navbar-nav">
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Profile</a>
-        </li>
-        
-        <li class="nav-item active"></li>
-          <a class="nav-link" href="#">Log Out</a>
-        </li>
-        
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Log In</a>
+          <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Sign Up</a>
+          <a class="nav-link" href="{{url_for('users.new')}}">Sign up</a>
         </li>
-        
+        <!-- <li class=" nav-item">
+          <a class="nav-link" href="">Login</a>
+        </li> -->
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            Settings
+            Make your choice
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Update Personal Details</a>
-            <a class="dropdown-item" href="#">Update Image</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Do more things</a>
+            <a class="dropdown-item" href="#">Logout</a>
+            <a class="dropdown-item" href="#">Enter my products</a>
+            <a class="dropdown-item" href="#">Sugar stats</a>
           </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
+
       </ul>
-    </div>
+      <form class="form-inline my-2 my-lg-0">
+        <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+      </form>
     </div>
   </nav>
 
-  <body>
-    {% block content %}
-    {% endblock %}
-  </body>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+  {% block content %}
+  {% endblock %}
+</body>
+
 </html>
