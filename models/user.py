@@ -10,4 +10,10 @@ class User(BaseModel):
     length = pw.CharField(unique= False)
     DOB = pw.DateField(unique=False)
 
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
 

@@ -3,6 +3,8 @@ import config
 from flask import Flask
 from models.base_model import db
 from flask_wtf.csrf import CSRFProtect
+from flask_login import LoginManager
+
 web_dir = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), 'sugartracker_web')
 
@@ -13,6 +15,9 @@ if os.getenv('FLASK_ENV') == 'production':
 else:
     app.config.from_object("config.DevelopmentConfig")
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "sessions.new"
 
 @app.before_request
 def before_request():
@@ -25,3 +30,10 @@ def _db_close(exc):
         print(db)
         print(db.close())
     return exc
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    from models.user import User
+    return User.get_by_id(user_id)
+

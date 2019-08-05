@@ -16,6 +16,15 @@
   <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.ico') }}">
 
 
+  {% assets "home_css" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+  {% endassets %}
+
+  {% assets "home_js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+  {% endassets %}
+
+
   {% block header %}{% endblock %}
   <title>{% block title %}{% endblock %}Sugartracker</title>
 </head>
@@ -37,9 +46,10 @@
         <li class="nav-item">
           <a class="nav-link" href="{{url_for('users.new')}}">Sign up</a>
         </li>
-        <!-- <li class=" nav-item">
-          <a class="nav-link" href="">Login</a>
-        </li> -->
+
+        <li class=" nav-item">
+            <a class="nav-link" href=" {{ url_for('sessions.new') }}">Log In</a>
+        </li>
 
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
