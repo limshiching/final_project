@@ -1,35 +1,107 @@
 {% extends "_layout.html" %}
+{% block header %}
+<style>
+    body{
+        height: 100%;
+    }
+    #predictions .food-photo,
+    #predictions .nutrition {
+        min-height: 370px;
+        position: relative;
+        float: left;
+        margin: 1rem auto;
+        padding-top: 25px;
+        background: #fff;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        text-align: center;
+        width: 50%;
+    }
+    #predictions .step {
+        position: absolute;
+        top:0.5rem;
+    }
+    #predictions .nutrition {
+        float:right;
+    }
+    #predictions .step span{
+        border-radius: 50%;
+        height: 1rem;
+        width: 1rem;
+        display: inline-block;
+    }
+    .wrapper {
+        background: #fff;
+        border-radius: 5px;
+        width: 650px;
+        
+    }
+</style>
+{% endblock %}
 {% block content %}
 
-<h1 class="text-center">Sugar Level of Food</h1>
+<div class="wrapper">
+    <h1 class="align-item-center" >Sugar Level in food</h1>
 
-<div class="container">
-    
-    <div class="d-flex flex-row justify-content-center">
-        <div class="row">
-            
-            <form action="{{ url_for('images.upload') }}" method="POST" enctype="multipart/form-data" style="border: 1px solid black;">
-                <label for="image">Upload Your Images</label>
-                <br />
-                <input type="file" name="user_file" class="mx-auto">
-                <button type="submit" class="btn btn-primary">Upload image</button>
-            </form>
+    <form class="text-aign-center">
+        <input type="file" id="filename" size="100" class="align-item-center" />
+        <button onclick="predict_click($('#filename').val(), 'file'); return false;" class="btn btn-primary">Get my Nutritional Breakdown!</button>
+    </form>
 
-            <div style="border: 1px solid blue">
-                <img src="http://placehold.it/180" alt="your image">    
+    <div class="container">
+        <div id="predictions" >
+            <div class="food-photo" >
+                <div class="step"><span>1</span> Upload a Photo</div>
             </div>
-
-            <div style="height: 250px; width: 250px; border: 1px solid; border-color: black;" class="text-center">
-                {% for result in results %}
-                <div>
-                    {{result['name']}}
-                {% endfor %}   
-                </div>
+            <div class="nutrition" >
+                <div class="step">2 Get a Nutritional Breakdown</div>
+                <div id="concepts"></div>
             </div>
-            
-
         </div>
     </div>
 </div>
 
+
+<script>
+let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
+
+let app = new Clarifai.App({apiKey: myClarifaiApiKey});
+
+function predict_click(value, source) {
+    var preview = $(".food-photo");
+    var file    = document.querySelector("input[type=file]").files[0];
+    var loader  = "https://s3.amazonaws.com/static.mlh.io/icons/loading.svg";
+    var reader  = new FileReader();
+
+  // load local file picture
+    reader.addEventListener("load", function () {
+        preview.attr('style', 'background-image: url("' + reader.result + '");');
+        doPredict({ base64: reader.result.split("base64,")[1] });
+    }, false);
+
+    if (file) {
+        reader.readAsDataURL(file);
+        // $('#concepts').html('<img src="' + loader + '" class="loading" />');
+    } else { alert("No file selcted!"); }
+}
+
+
+
+// //this is to detect the nutriton result from shi ching api
+// function doPrefiction(value) {
+//     app.models.predict(Clarifai.FOOD_MODEL, value).then(function(response) {
+//         if (response.data.outputs[0].data.hasOwnProperty("concepts")) {
+//             let tag = response.data.outputs[0].data.concept[0].name;
+//             let url = 'http://api.wolframalpha.com/v2/query?input=' + tag + '%20nutrition%20facts&appid=' + myWolframAppId;
+
+//             getNutritionInfo(url, function(result) {
+//                 $('#concepts').html('<h3>' + tag + '</h3>' + "<img src='" + result + "'>");
+//             });
+//         }
+//     }, function(err) { condsole.log(err); }
+//     );
+// }
+
+</script>
 {% endblock %}
