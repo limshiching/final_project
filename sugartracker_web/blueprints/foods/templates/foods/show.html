@@ -1,9 +1,120 @@
 {% extends "_layout.html" %}
 {% block content %}
 
-<h1> Food Item : </h1>
+<head>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" media="all" href="../../nutritionLabel-min.css">
+        <link rel="stylesheet" type="text/css" media="all" href="./../css/demo.css">
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Archivo+Black">
+</head>
+
+<body>
+    
+<div class="col-md-4">
+    <div id="test2"><div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style=" width: 280px;">
+<div class="title" tabindex="0">Nutrition Facts</div>
+<div class="cf">
+<div class="rel servingSizeField">
+<div class="setter">
+    <a href="Increase the Quantity Arrow" class="unitQuantityUp" aria-label="Increase the Quantity Arrow" rel="nofollow" tabindex="0"></a>
+    <a href="Decrease the Quantity Arrow" class="unitQuantityDown" aria-label="Decrease the Quantity Arrow" rel="nofollow" tabindex="0"></a>
+
+<input type="text" value="1" class="unitQuantityBox" aria-label="Change the Quantity Textbox">
+<input type="hidden" value="1" id="nixLabelBeforeQuantity">
+</div><!-- closing class="servingSizeField" -->
+
+<div class="name inline" tabindex="0"> {{item_name.capitalize()}} </div>
+
+<div class="bar1"></div>
+<div class="line m" tabindex="0"><strong>Amount Per Serving</strong></div>
+<div class="line">
+<div class="fr" tabindex="0">
+Calories from Fat {{data['hits'][0]['fields']['nf_calories_from_fat']}} </div>
+<div class="" tabindex="0">
+<strong>Calories</strong> <span itemprop="calories"> {{data['hits'][0]['fields']['nf_calories']}} </span></div>
+</div>
+<div class="bar2"></div>
+<div class="line ar "><strong>% Daily Value<sup>*</sup></strong></div>
+<div class="line" tabindex="0">
+<div class="dv" aria-hidden="true"><strong></strong>%</div>
+<strong>Total Fat</strong> <span itemprop="fatContent"> {{data['hits'][0]['fields']['nf_total_fat']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+</span></div>
+<div class="line indent" tabindex="0">
+<div class="dv" aria-hidden="true"><strong></strong>%</div>
+Saturated Fat <span itemprop="saturatedFatContent"> {{data['hits'][0]['fields']['nf_saturated_fat']}}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+</span></div>
+<div class="line indent" tabindex="0">
+
+<em>Trans</em> Fat <span itemprop="transFatContent"> {{data['hits'][0]['fields']['nf_trans_fatty_acid']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+</span></div>
+
+<div class="line" tabindex="0">
+<div class="dv" aria-hidden="true"><strong></strong>%</div>
+<strong>Cholesterol</strong> <span itemprop="cholesterolContent"> {{data['hits'][0]['fields']['nf_cholesterol']}} <span aria-hidden="true">mg</span><span class="sr-only"> milligrams</span>
+</span></div>
+<div class="line" tabindex="0">
+<div class="dv" aria-hidden="true"><strong></strong>%</div>
+<strong>Sodium</strong> <span itemprop="sodiumContent"> {{data['hits'][0]['fields']['nf_sodium']}} <span aria-hidden="true">mg</span><span class="sr-only"> milligrams</span>
+</span></div>
+<div class="line" tabindex="0">
+<div class="dv" aria-hidden="true"><strong></strong>%</div>
+<strong>Total Carbohydrates</strong> <span itemprop="carbohydrateContent"> {{data['hits'][0]['fields']['nf_total_carbohydrate']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+</span></div>
+<div class="line indent" tabindex="0">
+<div class="dv" aria-hidden="true"><strong></strong>%</div>
+Dietary Fiber <span itemprop="fiberContent"> {{data['hits'][0]['fields']['nf_dietary_fiber']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+</span></div>
+<div class="line indent" tabindex="0">
+Sugars <span itemprop="sugarContent"> {{data['hits'][0]['fields']['nf_sugars']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+</span></div>
+<div class="line" tabindex="0">
+<strong>Protein</strong> <span itemprop="proteinContent"> {{data['hits'][0]['fields']['nf_protein']}} <span aria-hidden="true">g</span><span class="sr-only"> grams</span></span></div>
+<div class="bar1"></div>
+<div class="line vitaminA" tabindex="0">
+<div class="dv">
+%</div>
+Vitamin A
+</div>
+<div class="line vitaminC" tabindex="0">
+<div class="dv">
+%</div>
+Vitamin C
+</div>
+<div class="line calcium" tabindex="0">
+<div class="dv">
+%</div>
+Calcium
+</div>
+<div class="line iron" tabindex="0">
+<div class="dv">
+%</div>
+Iron
+</div>
+<div class="dvCalorieDiet line">
+<div class="calorieNote">
+<span tabindex="0"><span class="star" aria-hidden="true">*</span> Percent Daily Values are based on a 2000 calorie diet.</span>
+<br>
+<div class="ingredientListDiv" tabindex="0">
+</div>
+
+</div>
+
+</div>
+
+<div class="naTooltip">Data not available</div>
+</div>
+</div>
+    </div>
+
+    <p> Daily Recommended Sugar Intake Per Day = 25g</p>
+    <p> Current Intake = {nf</p>
+</body>
 
 
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript" src="/bower_components/nutrition-label-jquery-plugin/dist/js/nutritionLabel-min.js"></script>
+    
 
 
 {% endblock %}
