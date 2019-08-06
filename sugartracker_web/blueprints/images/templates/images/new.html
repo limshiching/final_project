@@ -44,7 +44,7 @@
 <div class="wrapper">
     <h1 class="align-item-center" >Sugar Level in food</h1>
 
-    <form class="text-aign-center">
+    <form action="#" class="text-align-center">
         <input type="file" id="filename" size="100" class="align-item-center" />
         <button onclick="predict_click($('#filename').val(), 'file'); return false;" class="btn btn-primary">Get my Nutritional Breakdown!</button>
     </form>
@@ -103,19 +103,51 @@ function doPredict(value) {
                 concepts = concepts.slice(0, 9)
             }
 
-            concepts = concepts.map((foodItem) => {
-                return foodItem.name
+            // concepts = concepts.map((foodItem) => {
+            //     return foodItem.name
+            // })
+
+            // let uniqueItems = Array.from(new Set(concepts))
+
+            concepts.map((concept) => {
+                $('#concepts').append(`<li style="list-style: none;"><input type="checkbox">${concept.name}</input></li>`);
             })
-
-            let uniqueItems = Array.from(new Set(concepts))
-
-            uniqueItems.forEach((name) => {
-                $('#concepts').append(`<li>${name}</li>`)
-            })
-
+            
+            sentData(concepts)
         }
     }
     );
 }
+function sentData(concepts){
+    console.log('ping')
+    fetch("http://localhost:5000/images/upload", {
+        method: "POST",
+        body: JSON.stringify(concepts),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((response) => {
+        return response.json();
+    }).then((response) => {
+        console.log(response);
+    })
+}
+
+
+// $('#concepts').change(function(){
+//     let nutritionData = $('#Status');
+//     let nutritionStatus = JSON.stringify(nutritionData);
+//     console.log('nutrition:',nutritionStatus)
+//     $.ajax({
+//             url : 'http://localhost:5000/api/v1/images/upload', // the endpoint
+//             type : 'POST', // http method
+//             data : { 'data' : nutritionStatus
+//                 }, // data sent with the post request
+//             // handle a successful response
+//             success : function(data) {
+//             },
+//     });
+// });
+
 </script>
 {% endblock %}
