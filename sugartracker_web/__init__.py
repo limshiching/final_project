@@ -5,6 +5,9 @@ from .util.assets import bundles
 import os
 import config
 from sugartracker_web.util.oauth import oauth
+from flask_wtf.csrf import CSRFProtect
+
+csrf=CSRFProtect(app)    
 
 assets = Environment(app)
 assets.register(bundles)

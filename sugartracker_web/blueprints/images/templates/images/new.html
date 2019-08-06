@@ -55,13 +55,18 @@
                 <div class="step"><span>1</span> Upload a Photo</div>
             </div>
             <div class="nutrition" >
-                <div class="step">2 Get a Nutritional Breakdown</div>
+                <div class="step">2. Get a Nutritional Breakdown</div>
+                <br>
                 <div id="concepts"></div>
             </div>
         </div>
     </div>
 </div>
 
+<div class="container-fluid">
+    <p> If no image, click <a class="nav-link" href=" {{ url_for('foods.new') }}"> here </a> to key in food details: </p>
+
+</div>
 
 <script>
 let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
@@ -82,7 +87,7 @@ function predict_click(value, source) {
   // load local file picture
     reader.addEventListener("load", function () {
         preview.attr('style', 'background-image: url("' + reader.result + '");');
-        doPredict({ base64: reader.result.split("base64,")[1] });
+        doPredict({ base64: reader.result.split("base64,")[1] },queryFood);
     }, false);
     console.log(reader)
 
@@ -92,7 +97,7 @@ function predict_click(value, source) {
     } else { alert("No file selcted!"); }
 }
 
-function doPredict(value) {
+function doPredict(value,callback) {
     console.log(value)
     app.models.predict(Clarifai.FOOD_MODEL, value).then(function(response) {
         console.log(response)
@@ -107,6 +112,7 @@ function doPredict(value) {
             //     return foodItem.name
             // })
 
+
             // let uniqueItems = Array.from(new Set(concepts))
 
             concepts.map((concept) => {
@@ -114,10 +120,12 @@ function doPredict(value) {
             })
             
             sentData(concepts)
+
         }
     }
     );
 }
+  
 function sentData(concepts){
     console.log('ping')
     fetch("http://localhost:5000/images/upload", {
@@ -149,5 +157,26 @@ function sentData(concepts){
 //     });
 // });
 
+
+function queryFood() {
+    $('#concepts').append( 
+        `<form id="query" action="{{ url_for('foods.search') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="form-group">
+                <label for="item_name"> Did we miss out anything?  </label>
+                <input type="text" name="item_name" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+        </form>`)
+
+    concepts.map((concept) => {
+        $('#concepts').append(`${query.item_name}'`)
+    })
+}
+
+
 </script>
+
 {% endblock %}
+
