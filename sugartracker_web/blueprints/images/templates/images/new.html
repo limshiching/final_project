@@ -100,7 +100,7 @@ function doPredict(value) {
             let concepts = response.rawData.outputs[0].data.concepts;
 
             if (concepts.length > 10){
-                concepts = concepts.slice(10)
+                concepts = concepts.slice(0, 9)
             }
 
             concepts = concepts.map((foodItem) => {
