@@ -66,6 +66,10 @@
 <script>
 let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
 
+$('#filename').change(() => {
+    $('#concepts').html('')
+})
+
 let app = new Clarifai.App({apiKey: myClarifaiApiKey});
 app.models.initModel({id:Clarifai.FOOD_MODEL})
 
@@ -95,11 +99,20 @@ function doPredict(value) {
         if(response.rawData.outputs[0].data.hasOwnProperty("concepts")) {
             let concepts = response.rawData.outputs[0].data.concepts;
 
-            console.log(concepts)
+            if (concepts.length > 10){
+                concepts = concepts.slice(10)
+            }
 
-            concepts.forEach((obj) => {
-                $('#concepts').append(`<li>${obj.name}</li>`)
+            concepts = concepts.map((foodItem) => {
+                return foodItem.name
             })
+
+            let uniqueItems = Array.from(new Set(concepts))
+
+            uniqueItems.forEach((name) => {
+                $('#concepts').append(`<li>${name}</li>`)
+            })
+
         }
     }
     );
