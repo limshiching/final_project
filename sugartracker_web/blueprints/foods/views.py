@@ -36,7 +36,9 @@ def search():
     sugar = data['hits'][0]['fields']['nf_sugars']
     calories = data['hits'][0]['fields']['nf_calories']
     DailyIntake.create(item_name=item_name,sugar_amount=sugar,calories=calories,user=current_user.id,date=datetime.datetime.now())
-    return make_response(jsonify(data), 200)
+    # return make_response(jsonify(data), 200)
+    return redirect(url_for('foods.show', item_name=item_name))
+
 
 @foods_blueprint.route('/<item_name>', methods=["GET"])
 def show(item_name):

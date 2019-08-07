@@ -1,0 +1,60 @@
+{% extends "_layout.html" %}
+{% block content %}
+
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <h3>Daily Sugar intake</h3>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-6">
+            <p>You have consumed % of your daily dose of recommended sugars</p>
+            <p> You have grams of sugar left to
+                consume</p>
+        </div>
+        <div class="col-6">
+            <p>Sugar intake today: <b> {{sugar_amount}} grams</b></p>
+            <p>Daily recommended sugar intake: <b>{{sugar_daily}} grams</b></p>
+        </div>
+    </div>
+</div>
+</div>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <h3>Daily Calorie Intake</h3>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-4">Calorie intake today: {{calorie_amount}} calories</div>
+        <div class="col-4">Daily recommended calorie intake: {{cal_intake}} calories</div>
+        <div class="col-4">You have consumed % of your recommended daily calories and have calories left to
+            consume</div>
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <h3>Info</h3>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-4">Your current weight is: {{weight}} k</div>
+        <div class="col-4">Your current activity level is: {{activity}}</div>
+        <div class="col-4">Click <a href="{{url_for('users.info')}}">here</a> to change your weight and/or activity
+            level
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
