@@ -121,6 +121,9 @@ function doPredict(value,callback) {
                 $('#concepts').append(`<li style="list-style: none;"><input class="concepts-check" type="checkbox" value="${concept.name}">${concept.name}</input></li>`);
             })
 
+            sentData(concepts)
+            callback()
+
             let conceptsCheck = document.querySelectorAll('.concepts-check')
             
             conceptsCheck.forEach((option) => {
