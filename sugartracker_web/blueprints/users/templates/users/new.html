@@ -1,104 +1,89 @@
 {% extends "_layout.html" %}
 {% block content %}
 
-<p>
-</p>
-<p>
-</p>
-<p>
-</p>
-<p>
-</p>
-<form class="form-horizontal" action="{{ url_for('users.create')}}" method="POST">
-    <div class="col-sm-5">
-        <h1> Sign up here </h1>
-    </div>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Register</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+        <style> @import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');</style>
+    </head>
+    
+	<body>
+		<div class="register">
+			<h1 class="text-center">Registration</h1>
+			<div class="links">
+				<a href="{{ url_for('sessions.login') }}">Login</a>
+				<a href="{{ url_for('users.create') }}" class="active">Register</a>
+            </div>
+            
+			<form action="{{ url_for('users.create') }}" method="POST" autocomplete="off">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                
+				<label for="username">
+					<i class="fas fa-user"></i>
+                </label>
+                <input type="text" class="form-control" name="fullname" placeholder="Enter full name" required>
 
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="fullname">Fullname:</label>
-        <div class="col-sm-5">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <input class="form-control" name="fullname" placeholder="Enter full name">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="email">Email:</label>
-        <div class="col-sm-5">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <input type="email" class="form-control" name="email" placeholder="Enter email">
-        </div>
-    </div>
+                <label for="email">
+                    <i class="fas fa-envelope"></i>
+                </label>
+                <input type="email" class="form-control" name="email" placeholder="Enter e-mail address" id="email" required>
+                
+				<label for="password">
+					<i class="fas fa-lock"></i>
+				</label>
+                <input type="password" class="form-control" name="password" placeholder="Enter Password" id="password" required>		
+                
+                <label for="gender">
+                    <i class="fas fa-venus-mars"></i>
+                </label>
+                <select id="gender" class="form-control" name="gender">
+                    <option>Female</option>
+                    <option>Male</option>
+                </select>
 
+                <label for="activty">
+                    <i class="fas fa-running"></i>
+                </label>
+                <select id="activity" class="form-control" name="activity">
+                    <option>Very light</option>
+                    <option>Light</option>
+                    <option>Moderate</option>
+                    <option>Heavy</option>
+                    <option>Very Heavy</option>
+                </select>
 
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="pwd">Password:</label>
-        <div class="col-sm-5">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <input type="password" class="form-control" name="pwd" placeholder="Enter password">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="gender">Gender:</label>
-        <div class="col-sm-5">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <select class="form-control" name="gender">
-                <option>Female</option>
-                <option>Male</option>
-            </select>
-        </div>
-    </div>
+                <label for="height">
+                    <i class="fas fa-user"></i>
+                </label>
+                <input type="height" class="form-control" name="length" placeholder="Enter height in centimeters" required>
 
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="activity">Activity:</label>
-        <div class="col-sm-5">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <select class="form-control" name="activity">
-                <option>Very light</option>
-                <option>Light</option>
-                <option>Moderate</option>
-                <option>Heavy</option>
-                <option>Very Heavy</option>
-            </select>
-        </div>
-    </div>
+                <label for="weight">
+                    <i class="fas fa-weight"></i>
+                </label>
+                <input type="weight" class="form-control"
+                name="weight" placeholder="Enter weight in Kilo's" required>
 
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="length">Height:</label>
-        <div class="col-sm-5">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <input class="form-control" name="length" placeholder="Enter length in centimeters">
-        </div>
-    </div>
+                <label for="birthday">
+                    <i class="fas fa-birthday-cake"></i>
+                </label>
+                <input type="date" class="form-control" id="date" name="date" placeholder="YYYY/MM/DD" />
+                
+				<div class="msg">{{ msg }}</div>
+                <input type="submit" value="Register">
+            </form>
 
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="weight">Weight</label>
-        <div class="col-sm-5">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <input class="form-control" name="weight" placeholder="Enter weight in Kilo's">
-        </div>
-    </div>
+            <div id="google"class="form-group">
+                    <a href="{{url_for ('users.google') }}" style="color: white; text-align: center; display: block">Sign Up With Google</a>
+            </div>
 
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="date">Date of Birth:</label>
-        <div class="col-sm-5">
-            <input type="date" class="form-control" id="date" name="date" placeholder="YYYY/MM/DD" />
         </div>
 
-    </div>
-
-
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-    </div>
-</form>
-
-<div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-        <a href="{{url_for ('users.google') }}" class="btn btn-primary">Google Sign-Up</a>
-    </div>
-</div>
-
+        
+	</body>
+</html>
 
 {% endblock %}
+
