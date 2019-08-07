@@ -58,6 +58,7 @@
                 <div class="step">2. Get a Nutritional Breakdown</div>
                 <br>
                 <div id="concepts"></div>
+                <button id="save-results" class="btn btn-primary">Save Results</button>
             </div>
         </div>
     </div>
@@ -70,6 +71,8 @@
 
 <script>
 let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
+let chosenConcepts = []
+let saveRsltBtn = document.getElementById('save-results')
 
 $('#filename').change(() => {
     $('#concepts').html('')
@@ -114,21 +117,26 @@ function doPredict(value,callback) {
 
 
             // let uniqueItems = Array.from(new Set(concepts))
-
             concepts.map((concept) => {
-                $('#concepts').append(`<li style="list-style: none;"><input type="checkbox">${concept.name}</input></li>`);
+                $('#concepts').append(`<li style="list-style: none;"><input class="concepts-check" type="checkbox" value="${concept.name}">${concept.name}</input></li>`);
+            })
+
+            let conceptsCheck = document.querySelectorAll('.concepts-check')
+            
+            conceptsCheck.forEach((option) => {
+                option.addEventListener('change',(e) => {
+                    if(chosenConcepts.includes(e.target.value)){
+                        chosenConcepts.splice(chosenConcepts.indexOf(e.target.value), 1)
+                    } else {
+                        chosenConcepts.push(e.target.value)
+                    }
+                    console.log(chosenConcepts)
+                })
             })
             
-            sentData(concepts)
-
-        }
-    }
-    );
-}
-  
+          
 function sentData(concepts){
-    console.log('ping')
-    fetch("http://localhost:5000/images/upload", {
+    fetch("http://localhost:5000/images/check", {
         method: "POST",
         body: JSON.stringify(concepts),
         headers: {
@@ -141,21 +149,7 @@ function sentData(concepts){
     })
 }
 
-
-// $('#concepts').change(function(){
-//     let nutritionData = $('#Status');
-//     let nutritionStatus = JSON.stringify(nutritionData);
-//     console.log('nutrition:',nutritionStatus)
-//     $.ajax({
-//             url : 'http://localhost:5000/api/v1/images/upload', // the endpoint
-//             type : 'POST', // http method
-//             data : { 'data' : nutritionStatus
-//                 }, // data sent with the post request
-//             // handle a successful response
-//             success : function(data) {
-//             },
-//     });
-// });
+saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
 
 
 function queryFood() {

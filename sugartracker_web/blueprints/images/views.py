@@ -1,8 +1,9 @@
-from flask import redirect, Blueprint, render_template, request, flash, url_for,jsonify
+from flask import redirect, Blueprint, render_template, request, flash, url_for,jsonify, make_response
 from clarifai.rest import ClarifaiApp
 from werkzeug.utils import secure_filename
 import os
 from app import csrf
+from models.daily_intake import DailyIntake
 
 
 images_blueprint = Blueprint('images',
@@ -13,28 +14,34 @@ images_blueprint = Blueprint('images',
 def new():
     return render_template('images/new.html')
 
-@images_blueprint.route('/upload', methods=['POST'])
+@images_blueprint.route('/check', methods=['POST'])
 @csrf.exempt
-breakpoint()
-    # data = request.form.get('concepts')
-    # print(data)
+def check():
+    items = request.json #get data from function sendData
 
-    # return jsonify({
-    #     'ok': True
-    # })
-    # if not data:
-    #     return jsonify({
-    #         'message': 'Failed' 
-    # })
-    # for nutritionData in stat:
-    #     get_food_on_status = DailyIntake.get_or_none(food_stage=nutritionData)
-    #     for food in get_food_on_status:
-    #         food_on_status_list.append(food)
-    
-    # s = DailyIntake(stat=stat)
+    for item_name in items:
+        u = DailyIntake(item_name=item_name)
+        u.save()
+        
+    response = {
+        'message': 'Success'
+    }
 
-    # if s.save():
-    #     flash('Succefully saved')
-    #     return redirect(url_for('images.new'))
+    return make_response(jsonify(response), 200)
+    # for food in data:
+    #     print(food)
+
+
+
+
+
+# how to make a chart
+# @images_blueprint.route('graph')
+# def first_garph():
+#     data = {}
+#         return render_template('', data=data)
+
+    # for item in request.json:
+    #     print(item['name']) #the value is determine value of the image prediction
 
 
