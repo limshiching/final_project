@@ -19,6 +19,7 @@ app.register_blueprint(users_blueprint, url_prefix="/users")
 app.register_blueprint(images_blueprint, url_prefix="/images")
 app.register_blueprint(foods_blueprint, url_prefix="/foods")
 app.register_blueprint(sessions_blueprint, url_prefix="/sessions")
+app.jinja_env.add_extension("chartkick.ext.charts")
 
 @app.errorhandler(500)
 def internal_server_error(e):
