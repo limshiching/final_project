@@ -32,7 +32,7 @@ def create():
     weight = request.form.get('weight')
     activity = request.form.get('activity')
     DOB = request.form.get('date')
-   
+
     hashed_password = generate_password_hash(password)
     user = User(name=name, email=email,
                 password=hashed_password, gender=gender, length=length, DOB=DOB, weight = weight, activity=activity)
