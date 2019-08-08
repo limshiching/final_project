@@ -6,19 +6,34 @@ Homepage
 {% endblock %}
 {% block content %}
 
-
-
 <html>
 	<head>
 		<meta charset="utf-8">
 		<title class=>Login</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-        <style> @import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');</style>
-
-        
+		<style> @import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');</style>
+		<style> @import url('https://fonts.googleapis.com/css?family=Righteous&display=swap');</style>
+		
 	</head>
 	<body>
+		{% if current_user.is_authenticated %}
+		<div class="container" style="margin: 20px; text-align: justify">
+			<h1 class="home-title"> Sugar Combat</h1>
+			<div class="card w-25" style="padding: 1em">
+			<p class="quotes"> “To ensure good health: eat lightly, breathe deeply, live moderately, cultivate cheerfulness, and maintain an interest in life.” -William Londen </p>
+			
+			Where would like to navigate to?
+			<div style="padding: 2px"></div>
+
+			<li><a href=" {{ url_for('foods.new') }}"> I'd like to search about a particular food.
+			<div style="padding: 2px"></div>
+			<li><a href=" {{ url_for('images.new') }}"> I'd like to upload a picture of a meal I had today and get its nutritional breakdown. </a></li>
+
+        </div>
+		</div>
+		</div>
+		{% else %}
 		<div class="login">
             <h1 class="text-center">Existing Users</h1>
             <div class="links">
@@ -38,9 +53,9 @@ Homepage
                 
 				<div class="msg">{{ msg }}</div>
 				<input type="submit" value="Login">
-            </form>
-            
+			</form>            
 		</div>
+		{% endif %}
 	</body>
 </html>
 
