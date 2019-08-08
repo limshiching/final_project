@@ -209,11 +209,9 @@ function sentData(concepts){
         return response.json();
     }).then((response) => {
         console.log(response);
+        let form = document.getElementById('query')
+        // form.submit()
     })
-}
-
-function searchFood(concepts){
-    fetch("")
 }
 
 // saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
@@ -228,8 +226,6 @@ function queryFood() {
                 <label for="item_name"> Did we miss out anything?  </label>
                 <input type="text" name="item_name" class="form-control" />
                 </div>
-
-                <button type="submit" class="btn btn-outline-success">Submit</button>
         </form>`)
 
     concepts.map((concept) => {
