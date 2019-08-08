@@ -33,9 +33,9 @@ def create():
     activity = request.form.get('activity')
     DOB = request.form.get('date')
 
-    # hashed_password = generate_password_hash(password)
+    hashed_password = generate_password_hash(password)
     user = User(name=name, email=email,
-                password=password, gender=gender, length=length, DOB=DOB, weight = weight, activity=activity)
+                password=hashed_password, gender=gender, length=length, DOB=DOB, weight = weight, activity=activity)
     if user.save():
         return redirect(url_for('home'))
     else:
