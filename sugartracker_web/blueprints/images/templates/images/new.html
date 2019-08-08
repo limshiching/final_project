@@ -31,12 +31,33 @@
         width: 1rem;
         display: inline-block;
     }
+    
     .wrapper {
         background: #fff;
         border-radius: 5px;
-        width: 650px;
+        width: 650px;        
+    }
+
+    #container-fluid {
+        width: 100%;
+    }
+
+    #sidebar {
+        float : left;
+        width : 50%;
+        padding : 1em;
+        background: white;
+        position: relative;
         
     }
+
+    #nutrition-info {
+        float: right;
+        width: 50%;
+        background: white;
+        position: relative;
+    }
+
 </style>
 {% endblock %}
 {% block content %}
@@ -47,9 +68,12 @@
 </head>
 
 <body>
-    <div class="wrapper" style="margin: 1px;">
-      <h1>Track your health.</h1><br>
-      <h2>Upload a photo of your meal & get the nutritional breakdown.</h2>
+    <div id="container-fluid" style="padding: 1em">
+        
+    <div id="sidebar">
+      <h1 class="text-center">Track your health.</h1>
+      <p class="text-center">Upload a photo of your meal & get the nutritional breakdown.</p>
+      <br>
   
       <form action="#">
         <input type="file" id="filename" placeholder="Filename" size="100"/>
@@ -73,9 +97,17 @@
       <div class="powered-by">
         <p> Powered by <img src="https://clarifai.com/static/images/logo.png" alt="Clarifai" />.</p>
         <p> If no image to upload, click <a href=" {{ url_for('foods.new') }}"> here</a> to key in food. </p>
-      </div>
+        </div>
     </div>
+
+      <div id="nutrition-info">
+        </div>
+    
+    </div>
+</div>
   </body>
+
+
 
 <script>
 let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
