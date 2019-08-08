@@ -5,5 +5,43 @@ Homepage
 {% block header %}
 {% endblock %}
 {% block content %}
-<h1 class="text-center">Homepage</h1>
+
+
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title class=>Login</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+        <style> @import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');</style>
+
+        
+	</head>
+	<body>
+		<div class="login">
+            <h1 class="text-center">Existing Users</h1>
+            <div class="links">
+                    <a href="{{ url_for('sessions.login') }}" class="active">Login</a>
+                    <a href="{{ url_for('users.new') }}">Register</a>
+            </div>
+			<form action="{{ url_for('sessions.create') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+				<label for="email">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="email" placeholder="email" required>
+				<label for="password">
+					<i class="fas fa-lock"></i>
+				</label>
+                <input type="password" name="password" placeholder="Password" id="password" required>
+                
+				<div class="msg">{{ msg }}</div>
+				<input type="submit" value="Login">
+            </form>
+            
+		</div>
+	</body>
+</html>
+
 {% endblock %}

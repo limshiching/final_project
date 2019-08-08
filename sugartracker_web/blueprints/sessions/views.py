@@ -13,6 +13,10 @@ sessions_blueprint = Blueprint('sessions',
 def new():
     return render_template('sessions/new.html')
 
+@sessions_blueprint.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template('home.html', msg='')
+
 @sessions_blueprint.route('/create', methods= ['POST'])
 def create():
     email = request.form.get('email')
