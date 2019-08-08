@@ -20,12 +20,12 @@ def check():
     items = request.json #get data from function sendData
 
     for item in items:
-        u = DailyIntake(item_name=item['name'])
-        u.save()
-        
-    response = {
-        'message': 'Success'
-    }
+        u = DailyIntake(item_name=item)
+
+        if u.save():
+            response = {
+                'message': 'Success'
+            }
 
     return make_response(jsonify(response), 200)
 

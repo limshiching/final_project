@@ -26,7 +26,7 @@ def new():
 def create():
     name = request.form.get("fullname")
     email = request.form.get('email')
-    password = request.form.get('pwd')
+    password = request.form.get('password')
     gender = request.form.get('gender')
     length = request.form.get('length')
     weight = request.form.get('weight')
@@ -62,15 +62,13 @@ def google_login():
         return redirect(url_for('users.edit'))
     else:
         return redirect(url_for('users.create'))    
-     
+
 
 
 @users_blueprint.route('/edit', methods=['GET'])
 def edit():
 
     return render_template('users/edit.html')
-    
-   
 
 
 @users_blueprint.route('/update', methods=['POST', 'GET'])
