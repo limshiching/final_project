@@ -23,6 +23,14 @@ def check():
     items = request.json #get data from function sendData
 
     for item in items:
+<<<<<<< HEAD
+        u = DailyIntake(item_name=item)
+
+        if u.save():
+            response = {
+                'message': 'Success'
+            }
+=======
 
         nutritionix_id = os.getenv('NUTRITION_APP_ID')
         nutritionix_key = os.getenv('NUTRITION_APP_KEY')
@@ -33,6 +41,7 @@ def check():
         sugar = data['hits'][0]['fields']['nf_sugars']
         calories = data['hits'][0]['fields']['nf_calories']
         u = DailyIntake(item_name=item,sugar_amount=sugar,calories=calories,user=current_user.id,date=datetime.datetime.now())
+>>>>>>> master
 
         if u.save():
             response = {
