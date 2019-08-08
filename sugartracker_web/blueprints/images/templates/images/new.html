@@ -70,41 +70,39 @@
 <body>
     <div id="container-fluid" style="padding: 1em">
         
-    <div id="sidebar">
-      <h1 class="text-center">Track your health.</h1>
-      <p class="text-center">Upload a photo of your meal & get the nutritional breakdown.</p>
-      <br>
-  
-      <form action="#">
-        <input type="file" id="filename" placeholder="Filename" size="100"/>
-        <button onclick="predict_click($('#filename').val(), 'file'); return false;">Get my Nutritional Breakdown!</button>
-      </form>
-  
-      <div id="predictions">
-        <div class="food-photo">
-          <div class="step"><span>1</span> Upload a Photo</div>
-        </div>
-        <div class="nutrition">
-          <div class="step"><span>2</span> Get a Nutritional Breakdown</div>
-          <div id="concepts"></div>
-          <button id="save-results" class="btn btn-primary">Save Results</button>
+        <div id="sidebar">
+            <h1 class="text-center">Track your health.</h1>
+            <p class="text-center">Upload a photo of your meal & get the nutritional breakdown.</p>
+        <br>
+
+        <form action="#">
+            <input type="file" id="filename" placeholder="Filename" size="100"/>
+            <button onclick="predict_click($('#filename').val(), 'file'); return false;">Get my Nutritional Breakdown!</button>
+        </form>
         
+        <div id="predictions">
+            <div class="food-photo">
+                <div class="step"><span>1</span> Upload a Photo</div>
+            </div>
+            <div class="nutrition">
+                <div class="step"><span>2</span> Get a Nutritional Breakdown</div>
+                <div id="concepts"></div>
+                <button id="save-results" class="btn btn-primary">Save Results</button>
+            
 
+            </div>
         </div>
-      </div>
-  
-      <div class="powered-by">
-        <p> Powered by <img src="https://clarifai.com/static/images/logo.png" alt="Clarifai" />.</p>
-        <p> If no image to upload, click <a href=" {{ url_for('foods.new') }}"> here</a> to key in food. </p>
-        </div>
-    </div>
 
-      <div id="nutrition-info" role="alert">
+        <div class="powered-by">
+            <p> Powered by <img src="https://clarifai.com/static/images/logo.png" alt="Clarifai" />.</p>
+            <p> If no image to upload, click <a href=" {{ url_for('foods.new') }}"> here</a> to key in food. </p>
+            </div>
         </div>
-    
+
+        <div id="nutrition-info" role="alert"></div>
     </div>
 </div>
-  </body>
+</body>
 
 
 
@@ -212,7 +210,7 @@ function queryFood() {
                 <input type="text" name="item_name" class="form-control" />
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-outline-success">Submit</button>
         </form>`)
 
     concepts.map((concept) => {

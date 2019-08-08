@@ -19,8 +19,8 @@ def new():
 def check():
     items = request.json #get data from function sendData
 
-    for item_name in items:
-        u = DailyIntake(item_name=item_name)
+    for item in items:
+        u = DailyIntake(item_name=item['name'])
         u.save()
         
     response = {
@@ -28,9 +28,6 @@ def check():
     }
 
     return make_response(jsonify(response), 200)
-    # for food in data:
-    #     print(food)
-
 
 
 
