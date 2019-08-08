@@ -34,7 +34,7 @@ def create():
     login_user(user)
     session["username"] = "username"
     flash('Welcome, successfully signed in.')
-    return redirect(url_for('foods.new', id=user.id))
+    return redirect(url_for('home', id=user.id))
 
 @sessions_blueprint.route('new/google', methods=['GET'])
 def google_login():

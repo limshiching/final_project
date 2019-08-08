@@ -14,6 +14,9 @@ body {
     background-size: cover;
 
 }
+.home-title {
+    font-family: 'Righteous', cursive;
+}
 .text-center {
     font-family: 'Pacifico', cursive;
 }
