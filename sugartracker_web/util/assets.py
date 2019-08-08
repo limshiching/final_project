@@ -14,6 +14,7 @@ bundles = {
         'css/vendor/bootstrap-4.1.3.css',
         'css/custom.css',
         'css/login.css',
+        'css/background.css',
         filters='cssmin',
         output='gen/home.%(version)s.css'),
 
