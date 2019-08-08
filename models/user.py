@@ -11,9 +11,6 @@ class User(BaseModel):
     DOB = pw.TextField(unique=False, default= "01/01/2000")
     activity = pw.CharField(unique=False, default="moderate")
     weight = pw.CharField(unique=False, default=0)
-   
-
-
 
     def is_authenticated(self):
         return True
