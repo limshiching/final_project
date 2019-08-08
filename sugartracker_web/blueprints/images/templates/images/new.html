@@ -92,6 +92,7 @@
 
             </div>
         </div>
+        
 
         <div class="powered-by">
             <p> Powered by <img src="https://clarifai.com/static/images/logo.png" alt="Clarifai" />.</p>
@@ -109,7 +110,7 @@
 <script>
 let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
 let chosenConcepts = []
-let saveRsltBtn = document.getElementById('save-results')
+// let saveRsltBtn = document.getElementById('save-results')
 
 $('#filename').change(() => {
     $('#concepts').html('')
@@ -157,25 +158,45 @@ function doPredict(value,callback) {
             concepts.map((concept) => {
                 $('#concepts').append(`<li style="list-style: none;"><input class="concepts-check" type="checkbox" value="${concept.name}">${concept.name}</input></li>`);
             })
-
-            sentData(concepts)
+            console.log(concepts)
             callback()
 
-            let conceptsCheck = document.querySelectorAll('.concepts-check')
-            
-            conceptsCheck.forEach((option) => {
-                option.addEventListener('change',(e) => {
-                    if(chosenConcepts.includes(e.target.value)){
-                        chosenConcepts.splice(chosenConcepts.indexOf(e.target.value), 1)
-                    } else {
-                        chosenConcepts.push(e.target.value)
-                    }
-                    console.log(chosenConcepts)
-                })
-            })
+            // let conceptsCheck = document.querySelectorAll('.concepts-check')
+            // console.log(conceptsCheck)
+            // conceptsCheck.forEach((option) => {
+            //     option.addEventListener('change',(e) => {
+            //         // getValue(e)
+            //         console.log('lol')  
+            //         console.log('Hello')
+            //         console.log(chosenConcepts)
+            //     })
+            // })
         }
     });
 }
+// function getValue(e){
+//     if(chosenConcepts.includes(e.target.value)){
+//         chosenConcepts.splice(chosenConcepts.indexOf(e.target.value), 1)
+//     } else {
+//         chosenConcepts.push(e.target.value)
+//         console.log(e.target.value)
+//     }
+//     console.log(chosenConcepts)
+
+// }
+
+//check box is click or not only trigger the button
+$('#save-results').click(() => {
+    $('input[type=checkbox]').each(function(){
+        let value;
+        if (this.checked){
+            value = $(this).val()
+            chosenConcepts.push(value)
+        }
+    })
+    sentData(chosenConcepts)
+    console.log(chosenConcepts)
+})
 
 function sentData(concepts){
     fetch("http://localhost:5000/images/check", {
@@ -191,14 +212,12 @@ function sentData(concepts){
     })
 }
 
-saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
+function searchFood(concepts){
+    fetch("")
+}
 
-$('#save-results').click(() => {
-    $('input[type=checkbox]').each(function(){
-        let value = (this.checked ? $(this).val() : "");
-        console.log(value)
-    })
-})
+// saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
+
 
 
 function queryFood() {
