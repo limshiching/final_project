@@ -32,10 +32,10 @@ def create():
     weight = request.form.get('weight')
     activity = request.form.get('activity')
     DOB = request.form.get('date')
+    pwd = generate_password_hash(password)
 
-    hashed_password = generate_password_hash(password)
     user = User(name=name, email=email,
-                password=hashed_password, gender=gender, length=length, DOB=DOB, weight=weight, activity=activity)
+                password=pwd, gender=gender, length=length, DOB=DOB, weight=weight, activity=activity)
     if user.save():
         return redirect(url_for('home'))
     else:
@@ -61,7 +61,8 @@ def google_login():
         login_user(user)
         return redirect(url_for('users.edit'))
     else:
-        return redirect(url_for('users.create'))
+        return redirect(url_for('users.create'))    
+
 
 
 @users_blueprint.route('/edit', methods=["GET"])
