@@ -64,10 +64,21 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
 </head>
 
 <body>
+    <div class="row">
+        <div class="column md-6">
+            <div class="card" style="width:500px;height: 300px">
+                {% line_chart data with library={"width": "200px"} %}
+            </div>
+            <div class="card" style="width:500px;height: 300px">
+                {% column_chart data with library={"title":"Super chart"} %}
+            </div>
+        </div>
+    </div> 
+
     <div id="container-fluid" style="padding: 1em">
         
         <div id="sidebar">
