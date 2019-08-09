@@ -67,8 +67,10 @@ def new():
 @csrf.exempt
 def check():
     items = request.json #get data from function sendData
+    results=[]
 
     for item in items:
+
 
         nutritionix_id = os.getenv('NUTRITION_APP_ID')
         nutritionix_key = os.getenv('NUTRITION_APP_KEY')
@@ -81,38 +83,19 @@ def check():
         calories = data['hits'][0]['fields']['nf_calories']
         u = DailyIntake(item_name=item,sugar_amount=sugar,calories=calories,user=current_user.id,date=datetime.datetime.now())
 
-        if u.save():
-            response = {
-                'message': 'Success'
-            }
 
-    return make_response(jsonify(response), 200)
-
-
-
-# how to make a chart
-# @images_blueprint.route('/graph', methods=['GET'])
-# def garph():
-
-    # this is hard coded
-    # data = [
-    #     {'data': [['breakfast', 50.0], ['lunch', 50.0], ['dinner', 50.0]], 'name': 'normal sugar level'},
-    #     {'data': [['breakfast', 60.0], ['lunch', 55.0], ['dinner', 45.0]], 'name': 'sugar consume'},
-    #     {'data': [['breakfast', 0.0], ['lunch', 60.0], ['dinner', 35.0]], 'name': 'sugar'}
-    # ]
-    
-    # dynamic
-    # data = []
+        if u.save(): #turn into an object, so from object can get the name, data
+            nutrition = {
+                'item' : item,
+                'data': data
+            } 
+            results.append(nutrition)           
+    response = {
+        'message':'success',
+        'results':results
+    }
+    return make_response(jsonify(response)), 200
 
 
-
-    # select item_name and sugar_amount where people tick from the checkbox
-    # x = DailyIntake.get_or_none(created_at=created_at sugar_amount=sugar_amount)
-    # data = data.append(x)
-
-        # return render_template('images/show.html', data=data)
-
-    # for item in request.json:
-    #     print(item['name']) #the value is determine value of the image prediction
 
 
