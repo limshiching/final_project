@@ -15,7 +15,9 @@ images_blueprint = Blueprint('images',
 
 @images_blueprint.route('/new', methods=['GET'])
 def new():
-    return render_template('images/new.html')
+    data = [{'data': [['2013-04-03 04:00:00 UTC', 50.0], ['2013-04-10 00:00:00 UTC', 50.0]], 'name': 'Chrome'},
+    {'data': [['2013-04-03 04:00:00 UTC', 67.7], ['2013-04-10 00:00:00 UTC', 39.9]], 'name': 'Firefox'}]
+    return render_template('images/new.html', data=data)
 
 @images_blueprint.route('/check', methods=['POST'])
 @csrf.exempt
@@ -36,6 +38,7 @@ def check():
         nutritionix_key = os.getenv('NUTRITION_APP_KEY')
         
         response = requests.get(f'https://api.nutritionix.com/v1_1/search/{item}?results=0%3A1&fields=nf_total_fat%2Cnf_saturated_fat%2Cnf_trans_fatty_acid%2Cnf_cholesterol%2Cnf_sodium%2Cnf_sugars%2Cnf_calories%2Cnf_calories_from_fat%2Cnf_total_carbohydrate%2Cnf_dietary_fiber%2Cnf_protein%2Cnf_vitamin_a_dv%2Cnf_vitamin_c_dv%2Cnf_calcium_dv%2Cnf_iron_dv&appId={nutritionix_id}&appKey={nutritionix_key}')
+
         data=(response.json())
         
         sugar = data['hits'][0]['fields']['nf_sugars']
