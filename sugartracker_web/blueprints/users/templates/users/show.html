@@ -1,60 +1,90 @@
 {% extends "_layout.html" %}
 {% block content %}
 
+<html>
+
+<head>
+    <title class=>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');
+    </style>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Righteous&display=swap');
+    </style>
+</head>
 <br>
 <br>
-<div class="container">
-    <div class="row">
-        <div class="col text-center">
-            <h3>Daily Sugar intake</h3>
+
+<body>
+    <div class='background container p-4'>
+
+        <div class="row">
+            <div class="col text-center">
+                <h3>Daily Sugar intake</h3>
+            </div>
         </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-6">
-            <p>You have consumed % of your daily dose of recommended sugars</p>
-            <p> You have grams of sugar left to
-                consume</p>
+        <br>
+        <div class="row">
+            <div class="col-6">
+                <p>You have consumed <b>{{ps}} % </b>of your daily dose of recommended sugars</p>
+                <p> You have <b>{{sl}} grams </b>of sugar left to
+                    consume</p>
+            </div>
+            <div class="col-6">
+                <p>Sugar intake today: <b> {{sugar_amount}} grams</b></p>
+                <p>Daily recommended sugar intake: <b>{{sugar_daily}} grams</b></p>
+            </div>
         </div>
-        <div class="col-6">
-            <p>Sugar intake today: <b> {{sugar_amount}} grams</b></p>
-            <p>Daily recommended sugar intake: <b>{{sugar_daily}} grams</b></p>
+
+        <hr>
+        <br>
+
+        <div class="row">
+            <div class="col text-center">
+                <h3>Daily Calorie Intake</h3>
+            </div>
         </div>
-    </div>
-</div>
-</div>
-<br>
-<div class="container">
-    <div class="row">
-        <div class="col text-center">
-            <h3>Daily Calorie Intake</h3>
+        <br>
+        <div class="row">
+            <div class="col-6">
+                <p>You have consumed <b>{{pc}} % </b> of your recommended daily calories</p>
+                <p> You have <b>{{cl}} calories </b>left to
+                    consume</p>
+            </div>
+            <div class="col-6">
+                <p>Calorie intake today: <b>{{calorie_amount}} calories</b></p>
+                <p>Daily recommended calorie intake: <b>{{cal_intake}} calories</b></p>
+            </div>
         </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-4">Calorie intake today: {{calorie_amount}} calories</div>
-        <div class="col-4">Daily recommended calorie intake: {{cal_intake}} calories</div>
-        <div class="col-4">You have consumed % of your recommended daily calories and have calories left to
-            consume</div>
-    </div>
-</div>
-<br>
-<div class="container">
-    <div class="row">
-        <div class="col text-center">
-            <h3>Info</h3>
+
+        <br>
+        <hr>
+
+        <div class="row">
+            <div class="col text-center">
+                <h3>Info</h3>
+            </div>
         </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-4">Your current weight is: {{weight}} k</div>
-        <div class="col-4">Your current activity level is: {{activity}}</div>
-        <div class="col-4">Click <a href="{{url_for('users.info')}}">here</a> to change your weight and/or activity
-            level
+        <br>
+        <div class="row">
+            <div class="col-6">
+                <p>Your current weight is: <b>{{weight}} kg</b></p>
+                <p>Your current activity level is: <b>{{activity}}</b></p>
+            </div>
+            <div class="col-6">
+                <p>Click <a href="{{url_for('users.info')}}"><b>here</b></a> to change your weight </p>
+                <p>and/or
+                    activity
+                    level</p>
+            </div>
         </div>
+
     </div>
-</div>
+</body>
 
 
+</html>
 
 {% endblock %}

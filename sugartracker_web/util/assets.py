@@ -6,6 +6,7 @@ bundles = {
         'js/vendor/jquery-3.3.1.js',
         'js/vendor/popper.js',
         'js/vendor/bootstrap-4.1.3.js',
+        'js/vendor/chartkick.js',
         'js/custom.js',
         'js/nutrition.js',
         filters='jsmin',
@@ -17,6 +18,7 @@ bundles = {
         'css/login.css',
         'css/images.css',
         'css/nutrition.css',
+        'css/background.css',
         filters='cssmin',
         output='gen/home.%(version)s.css'),
 
