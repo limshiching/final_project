@@ -15,24 +15,17 @@ images_blueprint = Blueprint('images',
 
 @images_blueprint.route('/new', methods=['GET'])
 def new():
-    data = [{'data': [['2013-04-03 04:00:00 UTC', 50.0], ['2013-04-10 00:00:00 UTC', 50.0]], 'name': 'Chrome'},
-    {'data': [['2013-04-03 04:00:00 UTC', 67.7], ['2013-04-10 00:00:00 UTC', 39.9]], 'name': 'Firefox'}]
-    return render_template('images/new.html', data=data)
+    return render_template('images/new.html')
+
 
 @images_blueprint.route('/check', methods=['POST'])
 @csrf.exempt
 def check():
     items = request.json #get data from function sendData
+    results=[]
 
     for item in items:
-<<<<<<< HEAD
-        u = DailyIntake(item_name=item)
 
-        if u.save():
-            response = {
-                'message': 'Success'
-            }
-=======
 
         nutritionix_id = os.getenv('NUTRITION_APP_ID')
         nutritionix_key = os.getenv('NUTRITION_APP_KEY')
@@ -44,24 +37,20 @@ def check():
         sugar = data['hits'][0]['fields']['nf_sugars']
         calories = data['hits'][0]['fields']['nf_calories']
         u = DailyIntake(item_name=item,sugar_amount=sugar,calories=calories,user=current_user.id,date=datetime.datetime.now())
->>>>>>> master
-
-        if u.save():
-            response = {
-                'message': 'Success'
-            }
-
-    return make_response(jsonify(response), 200)
 
 
+        if u.save(): #turn into an object, so from object can get the name, data
+            nutrition = {
+                'item' : item,
+                'data': data
+            } 
+            results.append(nutrition)           
+    response = {
+        'message':'success',
+        'results':results
+    }
+    return make_response(jsonify(response)), 200
 
-# how to make a chart
-# @images_blueprint.route('graph')
-# def first_garph():
-#     data = {}
-#         return render_template('', data=data)
 
-    # for item in request.json:
-    #     print(item['name']) #the value is determine value of the image prediction
 
 

@@ -8,6 +8,7 @@ bundles = {
         'js/vendor/bootstrap-4.1.3.js',
         'js/vendor/chartkick.js',
         'js/custom.js',
+        'js/nutrition.js',
         filters='jsmin',
         output='gen/home.%(version)s.js'),
 
@@ -15,6 +16,8 @@ bundles = {
         'css/vendor/bootstrap-4.1.3.css',
         'css/custom.css',
         'css/login.css',
+        'css/images.css',
+        'css/nutrition.css',
         'css/background.css',
         filters='cssmin',
         output='gen/home.%(version)s.css'),
