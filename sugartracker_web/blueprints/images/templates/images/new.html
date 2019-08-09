@@ -68,20 +68,9 @@
 </head>
 
 <body>
-    <div class="row">
-        <div class="column md-6">
-            <div class="card" style="width:500px;height: 300px">
-                {% line_chart data with library={"width": "200px"} %}
-            </div>
-            <div class="card" style="width:500px;height: 300px">
-                {% column_chart data with library={"title":"Super chart"} %}
-            </div>
-        </div>
-    </div> 
-
-    <div id="container-fluid" style="padding: 1em">
+    <div id="container-fluid" style="margin-top: 5px; border: 1px solid green">
         
-        <div id="sidebar">
+        <div id="sidebar" style="border: 1px solid blue">
             <h1 class="text-center">Track your health.</h1>
             <p class="text-center">Upload a photo of your meal & get the nutritional breakdown.</p>
         <br>
@@ -99,11 +88,8 @@
                 <div class="step"><span>2</span> Get a Nutritional Breakdown</div>
                 <div id="concepts"></div>
                 <button id="save-results" class="btn btn-primary">Save Results</button>
-            
-
             </div>
         </div>
-        
 
         <div class="powered-by">
             <p> Powered by <img src="https://clarifai.com/static/images/logo.png" alt="Clarifai" />.</p>
@@ -113,7 +99,15 @@
 
         <div id="nutrition-info" role="alert"></div>
     </div>
-</div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="card border rounded border-danger" style="width: 550px; height: 300px; margin-left: 20px">
+                {% line_chart data with library={"title":"Super chart"} %}   
+            </div>
+        </div>
+    </div>
+
 </body>
 
 
@@ -121,7 +115,6 @@
 <script>
 let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
 let chosenConcepts = []
-// let saveRsltBtn = document.getElementById('save-results')
 
 $('#filename').change(() => {
     $('#concepts').html('')
@@ -145,7 +138,6 @@ function predict_click(value, source) {
 
     if (file) {
         reader.readAsDataURL(file);
-        // $('#concepts').html('<img src="' + loader + '" class="loading" />');
     } else { alert("No file selcted!"); }
 }
 
@@ -220,14 +212,12 @@ function sentData(concepts){
         return response.json();
     }).then((response) => {
         console.log(response);
-        let form = document.getElementById('query')
+        // let form = document.getElementById('query')
         // form.submit()
     })
 }
 
 // saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
-
-
 
 function queryFood() {
     $('#concepts').append( 
@@ -243,7 +233,6 @@ function queryFood() {
         $('#concepts').append(`${query.item_name}'`)
     })
 }
-
 
 </script>
 
