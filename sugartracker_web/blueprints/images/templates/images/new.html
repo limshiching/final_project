@@ -1,74 +1,23 @@
 {% extends "_layout.html" %}
 {% block header %}
 <style>
-    body{
-        height: 100%;
-    }
-    #predictions .food-photo,
-    #predictions .nutrition {
-        min-height: 370px;
-        position: relative;
-        float: left;
-        margin: 1rem auto;
-        padding-top: 25px;
-        background: #fff;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: contain;
-        text-align: center;
-        width: 50%;
-    }
-    #predictions .step {
-        position: absolute;
-        top:0.5rem;
-    }
-    #predictions .nutrition {
-        float:right;
-    }
-    #predictions .step span{
-        border-radius: 50%;
-        height: 1rem;
-        width: 1rem;
-        display: inline-block;
-    }
     
-    .wrapper {
-        background: #fff;
-        border-radius: 5px;
-        width: 650px;        
-    }
-
-    #container-fluid {
-        width: 100%;
-    }
-
-    #sidebar {
-        float : left;
-        width : 50%;
-        padding : 1em;
-        background: white;
-        position: relative;
-        
-    }
-
-    #nutrition-info {
-        float: right;
-        width: 50%;
-        background: white;
-        position: relative;
-    }
-
 </style>
+
+<head>
+<link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Archivo+Black">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
+
+</head>
+
 {% endblock %}
 {% block content %}
 
-<head>
-    <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
-</head>
 
-<body>
-    <div id="container-fluid" style="margin-top: 5px; border: 1px solid green">
+    <div id="container-fluid" style="padding: 1em">
+
+
         
         <div id="sidebar" style="border: 1px solid blue">
             <h1 class="text-center">Track your health.</h1>
@@ -96,145 +45,244 @@
             <p> If no image to upload, click <a href=" {{ url_for('foods.new') }}"> here</a> to key in food. </p>
             </div>
         </div>
-
         <div id="nutrition-info" role="alert"></div>
-    </div>
-    
-    <div class="container">
-        <div class="row">
-            <div class="card border rounded border-danger" style="width: 550px; height: 300px; margin-left: 20px">
-                {% line_chart data with library={"title":"Super chart"} %}   
-            </div>
-        </div>
-    </div>
-
-</body>
+        <div id="chart">
+                <div class="container">
+                        <div class="row">
+                            <div class="card border rounded border-danger" style="width: 550ps; height: 330; margin-left: 20px;">
+                                {% line_chart data %}
+                                {% pie_chart data with id='chart-1' height='400px' %}
 
 
-
-<script>
-let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
-let chosenConcepts = []
-
-$('#filename').change(() => {
-    $('#concepts').html('')
-})
-
-let app = new Clarifai.App({apiKey: myClarifaiApiKey});
-app.models.initModel({id:Clarifai.FOOD_MODEL})
-
-function predict_click(value, source) {
-    let preview = $(".food-photo");
-    let file    = document.querySelector("input[type=file]").files[0];
-    let loader  = "https://s3.amazonaws.com/static.mlh.io/icons/loading.svg";
-    let reader  = new FileReader();
-
-  // load local file picture
-    reader.addEventListener("load", function () {
-        preview.attr('style', 'background-image: url("' + reader.result + '");');
-        doPredict({ base64: reader.result.split("base64,")[1] },queryFood);
-    }, false);
-    console.log(reader)
-
-    if (file) {
-        reader.readAsDataURL(file);
-    } else { alert("No file selcted!"); }
-}
-
-function doPredict(value,callback) {
-    console.log(value)
-    app.models.predict(Clarifai.FOOD_MODEL, value).then(function(response) {
-        console.log(response)
-        if(response.rawData.outputs[0].data.hasOwnProperty("concepts")) {
-            let concepts = response.rawData.outputs[0].data.concepts;
-
-            if (concepts.length > 10){
-                concepts = concepts.slice(0, 9)
-            }
-
-            // concepts = concepts.map((foodItem) => {
-            //     return foodItem.name
-            // })
-
-
-            // let uniqueItems = Array.from(new Set(concepts))
-            concepts.map((concept) => {
-                $('#concepts').append(`<li style="list-style: none;"><input class="concepts-check" type="checkbox" value="${concept.name}">${concept.name}</input></li>`);
-            })
-            console.log(concepts)
-            callback()
-
-            // let conceptsCheck = document.querySelectorAll('.concepts-check')
-            // console.log(conceptsCheck)
-            // conceptsCheck.forEach((option) => {
-            //     option.addEventListener('change',(e) => {
-            //         // getValue(e)
-            //         console.log('lol')  
-            //         console.log('Hello')
-            //         console.log(chosenConcepts)
-            //     })
-            // })
-        }
-    });
-}
-// function getValue(e){
-//     if(chosenConcepts.includes(e.target.value)){
-//         chosenConcepts.splice(chosenConcepts.indexOf(e.target.value), 1)
-//     } else {
-//         chosenConcepts.push(e.target.value)
-//         console.log(e.target.value)
-//     }
-//     console.log(chosenConcepts)
-
-// }
-
-//check box is click or not only trigger the button
-$('#save-results').click(() => {
-    $('input[type=checkbox]').each(function(){
-        let value;
-        if (this.checked){
-            value = $(this).val()
-            chosenConcepts.push(value)
-        }
-    })
-    sentData(chosenConcepts)
-    console.log(chosenConcepts)
-})
-
-function sentData(concepts){
-    fetch("http://localhost:5000/images/check", {
-        method: "POST",
-        body: JSON.stringify(concepts),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then((response) => {
-        return response.json();
-    }).then((response) => {
-        console.log(response);
-        // let form = document.getElementById('query')
-        // form.submit()
-    })
-}
-
-// saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
-
-function queryFood() {
-    $('#concepts').append( 
-        `<form id="query" action="{{ url_for('foods.search') }}" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <div class="form-group">
-                <label for="item_name"> Did we miss out anything?  </label>
-                <input type="text" name="item_name" class="form-control" />
+                            </div>
+                        </div>
                 </div>
-        </form>`)
+         </div>
+    </div>
+</div>
+<script>
+        let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
+        let chosenConcepts = []
+        // let saveRsltBtn = document.getElementById('save-results')
+        
+        $('#filename').change(() => {
+            $('#concepts').html('')
+        })
+        
+        let app = new Clarifai.App({apiKey: myClarifaiApiKey});
+        app.models.initModel({id:Clarifai.FOOD_MODEL})
+        
+        function predict_click(value, source) {
+            let preview = $(".food-photo");
+            let file    = document.querySelector("input[type=file]").files[0];
+            let loader  = "https://s3.amazonaws.com/static.mlh.io/icons/loading.svg";
+            let reader  = new FileReader();
+        
+          // load local file picture
+            reader.addEventListener("load", function () {
+                preview.attr('style', 'background-image: url("' + reader.result + '");');
+                doPredict({ base64: reader.result.split("base64,")[1] },queryFood);
+            }, false);
+            console.log(reader)
+        
+            if (file) {
+                reader.readAsDataURL(file);
+                // $('#concepts').html('<img src="' + loader + '" class="loading" />');
+            } else { alert("No file selcted!"); }
+        }
+        
+        function doPredict(value,callback) {
+            console.log(value)
+            app.models.predict(Clarifai.FOOD_MODEL, value).then(function(response) {
+                console.log(response)
+                if(response.rawData.outputs[0].data.hasOwnProperty("concepts")) {
+                    let concepts = response.rawData.outputs[0].data.concepts;
+        
+                    if (concepts.length > 10){
+                        concepts = concepts.slice(0, 9)
+                    }
+        
+                    // concepts = concepts.map((foodItem) => {
+                    //     return foodItem.name
+                    // })
+        
+        
+                    // let uniqueItems = Array.from(new Set(concepts))
+                    concepts.map((concept) => {
+                        $('#concepts').append(`<li style="list-style: none;"><input class="concepts-check" type="checkbox" value="${concept.name}">${concept.name}</input></li>`);
+                    })
+                    console.log(concepts)
+                    callback()
+        
+                    // let conceptsCheck = document.querySelectorAll('.concepts-check')
+                    // console.log(conceptsCheck)
+                    // conceptsCheck.forEach((option) => {
+                    //     option.addEventListener('change',(e) => {
+                    //         // getValue(e)
+                    //         console.log('lol')  
+                    //         console.log('Hello')
+                    //         console.log(chosenConcepts)
+                    //     })
+                    // })
+                }
+            });
+        }
+        // function getValue(e){
+        //     if(chosenConcepts.includes(e.target.value)){
+        //         chosenConcepts.splice(chosenConcepts.indexOf(e.target.value), 1)
+        //     } else {
+        //         chosenConcepts.push(e.target.value)
+        //         console.log(e.target.value)
+        //     }
+        //     console.log(chosenConcepts)
+        
+        // }
+        
+        //check box is click or not only trigger the button
+        $('#save-results').click(() => {
+            let form = document.getElementById('query').value
+            if (form != ""){
+                chosenConcepts.push(form)
 
-    concepts.map((concept) => {
-        $('#concepts').append(`${query.item_name}'`)
-    })
-}
+            }
+            $('input[type=checkbox]').each(function(){
+                let value;
+                if (this.checked){
+                    value = $(this).val()
+                    chosenConcepts.push(value)
+                }
+            })
+            sentData(chosenConcepts)
+            console.log(chosenConcepts)
+        })
+        
+        function sentData(concepts){
+            fetch("http://localhost:5000/images/check", {
+                method: "POST",
+                body: JSON.stringify(concepts),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((response) => response.json())
+            .then((response) => {
+                console.log(response);
+                results = response.results
+                results.map((result)=>{
+                    $('#nutrition-info').append(`
+                    <div class="card">
+                    <div class="col-md-4">
+                        <div id="test2"><div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style=" width: 300px;">
+                    <div class="title" tabindex="0">Nutrition Facts</div>
+                    <div class="cf">
+                    
+                    <div class="name inline" style="text-transform: capitalize" tabindex="0"> ${result.item} </div>
+                    
+                    <div class="bar1"></div>
+                    <div class="line m" tabindex="0"><strong>Amount Per Serving</strong></div>
+                    <div class="line">
+                    <div class="fr" tabindex="0">
+                    Calories from Fat ${result.data['hits'][0]['fields']['nf_calories_from_fat']} </div>
+                    <div class="" tabindex="0">
+                    <strong>Calories</strong> <span itemprop="calories"> ${result.data['hits'][0]['fields']['nf_calories']} </span></div>
+                    </div>
+                    <div class="bar2"></div>
+                    <div class="line ar "><strong>% Daily Value<sup>*</sup></strong></div>
+                    <div class="line" tabindex="0">
+                    <div class="dv" aria-hidden="true"><strong></strong>%</div>
+                    <strong>Total Fat</strong> <span itemprop="fatContent"> ${result.data['hits'][0]['fields']['nf_total_fat']} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+                    </span></div>
+                    <div class="line indent" tabindex="0">
+                    <div class="dv" aria-hidden="true"><strong></strong>%</div>
+                    Saturated Fat <span itemprop="saturatedFatContent"> ${result.data['hits'][0]['fields']['nf_saturated_fat']}<span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+                    </span></div>
+                    <div class="line indent" tabindex="0">
+                    
+                    <em>Trans</em> Fat <span itemprop="transFatContent"> ${result.data['hits'][0]['fields']['nf_trans_fatty_acid']} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+                    </span></div>
+                    
+                    <div class="line" tabindex="0">
+                    <div class="dv" aria-hidden="true"><strong></strong>%</div>
+                    <strong>Cholesterol</strong> <span itemprop="cholesterolContent"> ${result.data['hits'][0]['fields']['nf_cholesterol']} <span aria-hidden="true">mg</span><span class="sr-only"> milligrams</span>
+                    </span></div>
+                    <div class="line" tabindex="0">
+                    <div class="dv" aria-hidden="true"><strong></strong>%</div>
+                    <strong>Sodium</strong> <span itemprop="sodiumContent"> ${result.data['hits'][0]['fields']['nf_sodium']} <span aria-hidden="true">mg</span><span class="sr-only"> milligrams</span>
+                    </span></div>
+                    <div class="line" tabindex="0">
+                    <div class="dv" aria-hidden="true"><strong></strong>%</div>
+                    <strong>Total Carbohydrates</strong> <span itemprop="carbohydrateContent">${result.data['hits'][0]['fields']['nf_total_carbohydrate']} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+                    </span></div>
+                    <div class="line indent" tabindex="0">
+                    Sugars <span itemprop="sugarContent"> ${result.data['hits'][0]['fields']['nf_sugars']} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+                    </span></div>
+                    <div class="line indent" tabindex="0">
+                        <div class="dv" aria-hidden="true"><strong></strong>%</div>
+                        Dietary Fiber <span itemprop="fiberContent"> ${result.data['hits'][0]['fields']['nf_dietary_fiber']} <span aria-hidden="true">g</span><span class="sr-only"> grams</span>
+                        </span>
+                    </div>
+                    <div class="line" tabindex="0">
+                        <strong>Protein</strong> <span itemprop="proteinContent"> ${result.data['hits'][0]['fields']['nf_protein']} <span aria-hidden="true">g</span><span class="sr-only"> grams</span></span>
+                    </div>
+                    <div class="bar1"></div>
+                    <div class="line vitaminA" tabindex="0">
+                        <div class="dv">
+                            ${result.data['hits'][0]['fields']['nf_vitamin_a_dv']} %</div>
+                    Vitamin A
+                    </div>
+                    <div class="line vitaminC" tabindex="0">
+                        <div class="dv">
+                            ${result.data['hits'][0]['fields']['nf_vitamin_c_dv']} %</div>
+                    Vitamin C
+                    </div>
+                    <div class="line calcium" tabindex="0">
+                        <div class="dv">
+                            ${result.data['hits'][0]['fields']['nf_calcium_dv']} %</div>
+                    Calcium
+                    </div>
+                    <div class="line iron" tabindex="0">
+                        <div class="dv">
+                            ${result.data['hits'][0]['fields']['nf_iron_dv']} %</div>
+                        Iron
+                    </div>
+                    <div class="dvCalorieDiet line">
+                        <div class="calorieNote">
+                            <span tabindex="0"><span class="star" aria-hidden="true">*</span> Percent Daily Values are based on a 2000 calorie diet.</span>
+                            <br>
+                            <div class="ingredientListDiv" tabindex="0">
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    `)
+                })
+            })
+        }
+        
+       
+        
+        // saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
+        
+        
+        
+        function queryFood() {
+            $('#concepts').append( 
+                `<form action="{{ url_for('foods.search') }}" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <div class="form-group">
+                        <label for="item_name"> Did we miss out anything?  </label>
+                        <input id="query" type="text" name="item_name" class="form-control" />
+                        </div>
+                </form>`)
+        
+            concepts.map((concept) => {
+                $('#concepts').append(`${query.item_name}'`)
+            })
+        }
+        
+        
+        </script>
+  
 
-</script>
 
 {% endblock %}
 
