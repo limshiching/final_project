@@ -6,6 +6,7 @@ from app import csrf
 from models.daily_intake import DailyIntake
 import requests
 from flask_login import current_user
+import datetime
 
 
 images_blueprint = Blueprint('images',
