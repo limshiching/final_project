@@ -15,12 +15,15 @@ images_blueprint = Blueprint('images',
 
 @images_blueprint.route('/new', methods=['GET'])
 def new():
+    # item = requests.get['item_name']
+
     return render_template('images/new.html')
 
 @images_blueprint.route('/check', methods=['POST'])
 @csrf.exempt
 def check():
     items = request.json #get data from function sendData
+    results=[]
 
     for item in items:
 
@@ -34,22 +37,18 @@ def check():
         calories = data['hits'][0]['fields']['nf_calories']
         u = DailyIntake(item_name=item,sugar_amount=sugar,calories=calories,user=current_user.id,date=datetime.datetime.now())
 
-        if u.save():
-            response = {
-                'message': 'Success'
-            }
+        if u.save(): #turn into an object, so from object can get the name, data
+            nutrition = {
+                'item' : item,
+                'data': data
+            } 
+            results.append(nutrition)           
+    response = {
+        'message':'success',
+        'results':results
+    }
+    return make_response(jsonify(response)), 200
 
-    return make_response(jsonify(response), 200)
 
-
-
-# how to make a chart
-# @images_blueprint.route('graph')
-# def first_garph():
-#     data = {}
-#         return render_template('', data=data)
-
-    # for item in request.json:
-    #     print(item['name']) #the value is determine value of the image prediction
 
 
