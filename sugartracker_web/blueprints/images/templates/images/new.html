@@ -7,28 +7,13 @@
 <head>
 <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Archivo+Black">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
+
 </head>
 
 {% endblock %}
 {% block content %}
 
-
-<head>
-    <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
-</head>
-
-<body>
-    <div class="row">
-        <div class="column md-6">
-            <div class="card" style="width:500px;height: 300px">
-                {% line_chart data with library={"width": "200px"} %}
-            </div>
-            <div class="card" style="width:500px;height: 300px">
-                {% column_chart data with library={"title":"Super chart"} %}
-            </div>
-        </div>
-    </div> 
 
     <div id="container-fluid" style="padding: 1em">
         
@@ -62,6 +47,18 @@
             </div>
         </div>
         <div id="nutrition-info" role="alert"></div>
+        <div id="chart">
+                <div class="container">
+                        <div class="row">
+                            <div class="card border rounded border-danger" style="width: 550ps; height: 330; margin-left: 20px;">
+                                {% line_chart data %}
+                                {% pie_chart data with id='chart-1' height='400px' %}
+
+
+                            </div>
+                        </div>
+                </div>
+         </div>
     </div>
 </div>
 <script>
@@ -281,28 +278,9 @@
                 $('#concepts').append(`${query.item_name}'`)
             })
         }
-
-// saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
-
-
-
-function queryFood() {
-    $('#concepts').append( 
-        `<form id="query" action="{{ url_for('foods.search') }}" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <div class="form-group">
-                <label for="item_name"> Did we miss out anything?  </label>
-                <input type="text" name="item_name" class="form-control" />
-                </div>
-        </form>`)
-
-    concepts.map((concept) => {
-        $('#concepts').append(`${query.item_name}'`)
-    })
-}
-
-
-</script>
+        
+        
+        </script>
 
 {% endblock %}
 
