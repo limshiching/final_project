@@ -16,8 +16,10 @@
 
 
     <div id="container-fluid" style="padding: 1em">
+
+
         
-        <div id="sidebar">
+        <div id="sidebar" style="border: 1px solid blue">
             <h1 class="text-center">Track your health.</h1>
             <p class="text-center">Upload a photo of your meal & get the nutritional breakdown.</p>
         <br>
@@ -35,11 +37,8 @@
                 <div class="step"><span>2</span> Get a Nutritional Breakdown</div>
                 <div id="concepts"></div>
                 <button id="save-results" class="btn btn-primary">Save Results</button>
-            
-
             </div>
         </div>
-        
 
         <div class="powered-by">
             <p> Powered by <img src="https://clarifai.com/static/images/logo.png" alt="Clarifai" />.</p>
@@ -144,6 +143,7 @@
             let form = document.getElementById('query').value
             if (form != ""){
                 chosenConcepts.push(form)
+
             }
             $('input[type=checkbox]').each(function(){
                 let value;
@@ -281,6 +281,8 @@
         
         
         </script>
+  
+
 
 {% endblock %}
 
