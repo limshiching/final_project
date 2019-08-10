@@ -16,7 +16,6 @@ images_blueprint = Blueprint('images',
 @images_blueprint.route('/new', methods=['GET'])
 def new():
     data = [
-     
         {'data': [
             ['early breakfast', 0.0],
             ['breakfast', 0.0], 
@@ -59,7 +58,8 @@ def new():
             'name': 'calories'
         },
     ]
-    # food_items = DailyIntake.select(item_name, sugar_amount).where()
+    # food_items = DailyIntake.select(sugar_amount).where(sugar_amount == 0.5)
+    # food_items = DailyIntake.get_or_none(item_name=item_name, sugar_amount=sugar_amount, calories=calories)
 
     # for item in food_items:
 
