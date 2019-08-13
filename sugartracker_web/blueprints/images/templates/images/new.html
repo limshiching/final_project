@@ -1,5 +1,26 @@
 {% extends "_layout.html" %}
 {% block header %}
+<style>
+
+@import 'https://code.highcharts.com/css/highcharts.css';
+
+#container {
+	height: 400px;
+	max-width: 800px;
+	min-width: 320px;
+	margin: 0 auto;
+}
+.highcharts-pie-series .highcharts-point {
+	stroke: black;
+	stroke-width: 2px;
+}
+.highcharts-pie-series .highcharts-data-label-connector {
+	stroke: silver;
+	stroke-dasharray: 2, 2;
+	stroke-width: 2px;
+}
+    
+</style>
 
 <head>
 <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
@@ -14,8 +35,8 @@
 {% endblock %}
 {% block content %}
 
-    <div id="container-fluid" style="padding: 1em">
 
+    <div id="container-fluid">
         
         <div id="sidebar">
             <h1 class="text-center">Track your health.</h1>
@@ -31,7 +52,6 @@
             <div class="food-photo">
                 <div class="step"><span>1</span> Upload a Photo</div>
             </div>
-
             <div class="nutrition">
                 <div class="step"><span>2</span> Get a Nutritional Breakdown</div>
                 <div id="concepts"></div>
@@ -40,25 +60,24 @@
 
             </div>
         </div>
-        
 
         <div class="powered-by">
             <p> Powered by <img src="https://clarifai.com/static/images/logo.png" alt="Clarifai" />.</p>
             <p> If no image to upload, click <a href=" {{ url_for('foods.new') }}"> here</a> to key in food. </p>
             </div>
+           
         </div>
 
-        <div id="nutrition-info" role="alert" style="display: flex"></div>
+        <div id="nutrition-info" role="alert"></div>
         <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 
                          
                             </div>
                         </div>
                 </div>
-            </div>
-        </div>
+         </div>
     </div>
-
+</div>
 <script>
         let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
         let chosenConcepts = []
@@ -74,7 +93,7 @@
         function predict_click(value, source) {
             let preview = $(".food-photo");
             let file    = document.querySelector("input[type=file]").files[0];
-            // let loader  = "https://s3.amazonaws.com/static.mlh.io/icons/loading.svg";
+            let loader  = "https://s3.amazonaws.com/static.mlh.io/icons/loading.svg";
             let reader  = new FileReader();
         
           // load local file picture
@@ -89,14 +108,13 @@
                 // $('#concepts').html('<img src="' + loader + '" class="loading" />');
             } else { alert("No file selcted!"); }
         }
-
-        //predict image
+        
         function doPredict(value,callback) {
             console.log(value)
             app.models.predict(Clarifai.FOOD_MODEL, value).then(function(response) {
                 console.log(response)
                 if(response.rawData.outputs[0].data.hasOwnProperty("concepts")) {
-                    let concepts = response.rawData.outputs[0].data.concepts; 
+                    let concepts = response.rawData.outputs[0].data.concepts;
         
                     if (concepts.length > 10){
                         concepts = concepts.slice(0, 9)
@@ -141,8 +159,8 @@
                 results = response.results
                 results.map((result)=>{
                     $('#nutrition-info').append(`
-                    <div id="info" style="width: 50%">
-                    <div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style=" width: 300px;">
+                    <div id="info" style="width: 50% display:flex-wrap; background: white">
+                    <div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style="width: 300px; background: white;">
                     <div class="title" tabindex="0">Nutrition Facts</div>
                     <div class="cf">
                     
@@ -227,59 +245,60 @@
                     </div>
                     </div>
 
-                    <div id="chart-container" style="width: 50%"></div>
+                    <div id="chart-container-${result.item}" style="width: 50%"></div>
                     </div>
 
 
                     `)
-                });
 
-                Highcharts.chart('chart-container', {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title : {
-                    text: 'Source of Calories'
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>            {point.percentage:.1f}%</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</  b>:           {point.percentage:.1f} %'
-                        }
-                    }
-                },
-                series: [{
-                    name: 'Foods',
-                    colorByPoint: true,
-                    data: [{
-                        name: 'Protein',
-                        y: results[0].data['hits'][0]   ['fields']     ['nf_protein'] ,
-                        sliced: true,
-                        selected: true
-                    }, {
-                        name: 'Fats',
-                        y: results[0].data['hits'][0]   ['fields']     ['nf_total_fat'],
-                    }, {
-                        name: 'Carbohydrates',
-                        y: results[0].data['hits'][0]   ['fields']         ['nf_total_carbohydrate'],
-                    }]
-                }]
-            })
+                    Highcharts.chart(`chart-container-${result.item}`, {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title : {
+                            text: 'Source of Calories'
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>            {point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</  b>:           {point.percentage:.1f} %'
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Foods',
+                            colorByPoint: true,
+                            data: [{
+                                name: 'Protein',
+                                y: result.data['hits'][0]['fields']     ['nf_protein'] ,
+                                sliced: true,
+                                selected: true
+                            }, {
+                                name: 'Fats',
+                                y: result.data['hits'][0]['fields']     ['nf_total_fat'],
+                            }, {
+                                name: 'Carbohydrates',
+                                y: result.data['hits'][0]['fields']         ['nf_total_carbohydrate'],
+                            }]
+                        }]
+                    })
+                });
                 
             })
         }
-
+        
+        // saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
+        
         function queryFood() {
-            console.log('hello')
             $('#concepts').append( 
                 `<form action="{{ url_for('foods.search') }}" method="POST">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -294,6 +313,7 @@
             })
         }
 
+    
 
     </script>
 
