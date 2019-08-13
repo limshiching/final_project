@@ -6,6 +6,8 @@ from app import csrf
 from models.daily_intake import DailyIntake
 import requests
 from flask_login import current_user
+import datetime
+from highcharts import Highchart
 
 
 images_blueprint = Blueprint('images',
@@ -14,55 +16,11 @@ images_blueprint = Blueprint('images',
 
 @images_blueprint.route('/new', methods=['GET'])
 def new():
-    data = [
-     
-        {'data': [
-            ['early breakfast', 0.0],
-            ['breakfast', 0.0], 
-            ['late breakfast', 0.0], 
-            ['early lunch', 0.0], 
-            ['lunch', 0.0], 
-            ['late lunch', 0.0], 
-            ['early dinner', 0.0], 
-            ['dinner', 0.0], 
-            ['late dinner', 0.0], 
-            ['supper', 0.0]], 
-            'name': 'normal sugar level'
-        },
-
-        {'data': [
-            ['early breakfast', 10.0],
-            ['breakfast', 0.0], 
-            ['late breakfast', -10.0], 
-            ['early lunch', 0.0], 
-            ['lunch', 10.0], 
-            ['late lunch', 0.0], 
-            ['early dinner', -10.0], 
-            ['dinner', 0.0], 
-            ['late dinner', 10.0], 
-            ['supper', 0.0]], 
-            'name': 'food sugar'
-        },
-
-        {'data': [
-            ['early breakfast', 30.0],
-            ['breakfast', 50.0], 
-            ['late breakfast', 70.0], 
-            ['early lunch', 50.0], 
-            ['lunch', 30.0], 
-            ['late lunch', 50.0], 
-            ['early dinner', 70.0], 
-            ['dinner', 50.0], 
-            ['late dinner', 30.0], 
-            ['supper', 50.0]], 
-            'name': 'calories'
-        },
-    ]
     # food_items = DailyIntake.select(item_name, sugar_amount).where()
 
     # for item in food_items:
 
-    return render_template('images/new.html', data=data)
+    return render_template('images/new.html')
 
 @images_blueprint.route('/check', methods=['POST'])
 @csrf.exempt

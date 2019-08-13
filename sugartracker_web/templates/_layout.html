@@ -43,8 +43,8 @@
   <title>{% block title %}{% endblock %}Sugartracker</title>
 </head>
 
-<body>
-
+<body style="height: 100vh;">
+    <div class="bg">
   <div class="nav-container">
     <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">SugarCombat</a>
@@ -99,6 +99,8 @@
 
   {% block content %}
   {% endblock %}
+</div>
 </body>
+
 
 </html>
