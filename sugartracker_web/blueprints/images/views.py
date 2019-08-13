@@ -13,13 +13,15 @@ images_blueprint = Blueprint('images',
 
 
 @images_blueprint.route('/new', methods=['GET'])
+@csrf.exempt
 def new():
+
     # food_items = DailyIntake.select(item_name, sugar_amount).where()
 
     # for item in food_items:
 
     return render_template('images/new.html')
-
+    
 @images_blueprint.route('/check', methods=['POST'])
 @csrf.exempt
 def check():
@@ -28,6 +30,7 @@ def check():
 
     for item in items:
 
+        
         nutritionix_id = os.getenv('NUTRITION_APP_ID')
         nutritionix_key = os.getenv('NUTRITION_APP_KEY')
         
@@ -37,7 +40,7 @@ def check():
         sugar = data['hits'][0]['fields']['nf_sugars']
         calories = data['hits'][0]['fields']['nf_calories']
         u = DailyIntake(item_name=item,sugar_amount=sugar,calories=calories,user=current_user.id,date=datetime.datetime.now())
-
+            
         if u.save(): #turn into an object, so from object can get the name, data
             nutrition = {
                 'item' : item,
