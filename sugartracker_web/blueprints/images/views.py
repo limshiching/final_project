@@ -16,7 +16,9 @@ images_blueprint = Blueprint('images',
 @csrf.exempt
 def new():
 
-    # food_items = DailyIntake.select(item_name, sugar_amount).where()
+    # food_items = DailyIntake.select().where(DailyIntake.item_name == 'burger')
+    # print(food_items)
+    
 
     # for item in food_items:
 
