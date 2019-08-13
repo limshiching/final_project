@@ -142,10 +142,10 @@
 	z-index: 10000;
 }
 .nutritionLabel .spaceAbove {
-	 height: 10px;
+	height: 10px;
 }
 .nutritionLabel .spaceBelow {
-	 height: 10px;
+	height: 10px;
 }
 .nutritionLabel .setter {
 	width: 12px;
@@ -180,7 +180,7 @@
 	height: 20px;
 	padding:2px;
 	font-size: .9em !important;
-	margin-left: 15px;
+	margin-left: 200px;
 	margin-bottom: 0;
 	line-height: 15px;
 }
@@ -323,9 +323,9 @@
 }
 
 .nf-vitamin-column {
- font-size: .94em;
- padding: 1px 0;
- border-bottom: 1px solid #000;
+font-size: .94em;
+padding: 1px 0;
+border-bottom: 1px solid #000;
 }
 
 .nf-footnote, .nf-footnoteHiddenDailyValues {
@@ -483,10 +483,10 @@ div, span{
 }
 
 .nf .nf-spaceAbove {
-	 height: 10px;
+	height: 10px;
 }
 .nf .nf-spaceBelow {
-	 height: 10px;
+	height: 10px;
 }
 
 /*******************************************************************************************************************
@@ -573,10 +573,10 @@ div, span{
 }
 
 .uk_nf .uk_nf-spaceAbove {
-	 height: 10px;
+	height: 10px;
 }
 .uk_nf .uk_nf-spaceBelow {
-	 height: 10px;
+	height: 10px;
 }
 
 .uk_nf-ingredientListDiv.scroll {

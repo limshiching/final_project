@@ -1,8 +1,5 @@
 {% extends "_layout.html" %}
 {% block header %}
-<style>
-    
-</style>
 
 <head>
 <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
@@ -14,11 +11,8 @@
 {% endblock %}
 {% block content %}
 
-
     <div id="container-fluid" style="padding: 1em">
 
-
-        
         <div id="sidebar" style="border: 1px solid blue">
             <h1 class="text-center">Track your health.</h1>
             <p class="text-center">Upload a photo of your meal & get the nutritional breakdown.</p>
@@ -33,6 +27,7 @@
             <div class="food-photo">
                 <div class="step"><span>1</span> Upload a Photo</div>
             </div>
+
             <div class="nutrition">
                 <div class="step"><span>2</span> Get a Nutritional Breakdown</div>
                 <div id="concepts"></div>
@@ -45,21 +40,19 @@
             <p> If no image to upload, click <a href=" {{ url_for('foods.new') }}"> here</a> to key in food. </p>
             </div>
         </div>
+
         <div id="nutrition-info" role="alert"></div>
         <div id="chart">
-                <div class="container">
-                        <div class="row">
-                            <div class="card border rounded border-danger" style="width: 550ps; height: 330; margin-left: 20px;">
-                                {% line_chart data %}
-                                {% pie_chart data with id='chart-1' height='400px' %}
-
-
-                            </div>
-                        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="card border rounded border-danger" style="width: 550ps; height: 330; margin-left: 20px;">
+                        <!-- {% line_chart data %} -->
+                    </div>
                 </div>
-         </div>
+            </div>
+        </div>
     </div>
-</div>
+
 <script>
         let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
         let chosenConcepts = []
@@ -75,7 +68,7 @@
         function predict_click(value, source) {
             let preview = $(".food-photo");
             let file    = document.querySelector("input[type=file]").files[0];
-            let loader  = "https://s3.amazonaws.com/static.mlh.io/icons/loading.svg";
+            // let loader  = "https://s3.amazonaws.com/static.mlh.io/icons/loading.svg";
             let reader  = new FileReader();
         
           // load local file picture
@@ -90,13 +83,14 @@
                 // $('#concepts').html('<img src="' + loader + '" class="loading" />');
             } else { alert("No file selcted!"); }
         }
-        
+
+        //predict image
         function doPredict(value,callback) {
             console.log(value)
             app.models.predict(Clarifai.FOOD_MODEL, value).then(function(response) {
                 console.log(response)
                 if(response.rawData.outputs[0].data.hasOwnProperty("concepts")) {
-                    let concepts = response.rawData.outputs[0].data.concepts;
+                    let concepts = response.rawData.outputs[0].data.concepts; 
         
                     if (concepts.length > 10){
                         concepts = concepts.slice(0, 9)
@@ -257,14 +251,10 @@
                 })
             })
         }
-        
-       
-        
         // saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
-        
-        
-        
+
         function queryFood() {
+            console.log('hello')
             $('#concepts').append( 
                 `<form action="{{ url_for('foods.search') }}" method="POST">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -278,10 +268,8 @@
                 $('#concepts').append(`${query.item_name}'`)
             })
         }
-        
-        
-        </script>
-  
+
+</script>
 
 
 {% endblock %}
