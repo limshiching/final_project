@@ -5,6 +5,9 @@
 <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Archivo+Black">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
 
 </head>
 
@@ -13,7 +16,8 @@
 
     <div id="container-fluid" style="padding: 1em">
 
-        <div id="sidebar" style="border: 1px solid blue">
+        
+        <div id="sidebar">
             <h1 class="text-center">Track your health.</h1>
             <p class="text-center">Upload a photo of your meal & get the nutritional breakdown.</p>
         <br>
@@ -32,8 +36,11 @@
                 <div class="step"><span>2</span> Get a Nutritional Breakdown</div>
                 <div id="concepts"></div>
                 <button id="save-results" class="btn btn-primary">Save Results</button>
+            
+
             </div>
         </div>
+        
 
         <div class="powered-by">
             <p> Powered by <img src="https://clarifai.com/static/images/logo.png" alt="Clarifai" />.</p>
@@ -41,13 +48,12 @@
             </div>
         </div>
 
-        <div id="nutrition-info" role="alert"></div>
-        <div id="chart">
-            <div class="container">
-                <div class="row">
-                    <div class="card border rounded border-danger" style="width: 550ps; height: 330; margin-left: 20px;">
-                        <!-- {% line_chart data %} -->
-                    </div>
+        <div id="nutrition-info" role="alert" style="display: flex"></div>
+        <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+                         
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
@@ -96,48 +102,20 @@
                         concepts = concepts.slice(0, 9)
                     }
         
-                    // concepts = concepts.map((foodItem) => {
-                    //     return foodItem.name
-                    // })
-        
-        
-                    // let uniqueItems = Array.from(new Set(concepts))
                     concepts.map((concept) => {
                         $('#concepts').append(`<li style="list-style: none;"><input class="concepts-check" type="checkbox" value="${concept.name}">${concept.name}</input></li>`);
                     })
                     console.log(concepts)
                     callback()
         
-                    // let conceptsCheck = document.querySelectorAll('.concepts-check')
-                    // console.log(conceptsCheck)
-                    // conceptsCheck.forEach((option) => {
-                    //     option.addEventListener('change',(e) => {
-                    //         // getValue(e)
-                    //         console.log('lol')  
-                    //         console.log('Hello')
-                    //         console.log(chosenConcepts)
-                    //     })
-                    // })
                 }
             });
         }
-        // function getValue(e){
-        //     if(chosenConcepts.includes(e.target.value)){
-        //         chosenConcepts.splice(chosenConcepts.indexOf(e.target.value), 1)
-        //     } else {
-        //         chosenConcepts.push(e.target.value)
-        //         console.log(e.target.value)
-        //     }
-        //     console.log(chosenConcepts)
-        
-        // }
-        
-        //check box is click or not only trigger the button
+       
         $('#save-results').click(() => {
             let form = document.getElementById('query').value
             if (form != ""){
                 chosenConcepts.push(form)
-
             }
             $('input[type=checkbox]').each(function(){
                 let value;
@@ -163,9 +141,8 @@
                 results = response.results
                 results.map((result)=>{
                     $('#nutrition-info').append(`
-                    <div class="card">
-                    <div class="col-md-4">
-                        <div id="test2"><div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style=" width: 300px;">
+                    <div id="info" style="width: 50%">
+                    <div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style=" width: 300px;">
                     <div class="title" tabindex="0">Nutrition Facts</div>
                     <div class="cf">
                     
@@ -247,11 +224,59 @@
                         </div>
                     </div>
                     </div>
+                    </div>
+                    </div>
+
+                    <div id="chart-container" style="width: 50%"></div>
+                    </div>
+
+
                     `)
-                })
+                });
+
+                Highcharts.chart('chart-container', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title : {
+                    text: 'Source of Calories'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>            {point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</  b>:           {point.percentage:.1f} %'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Foods',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Protein',
+                        y: results[0].data['hits'][0]   ['fields']     ['nf_protein'] ,
+                        sliced: true,
+                        selected: true
+                    }, {
+                        name: 'Fats',
+                        y: results[0].data['hits'][0]   ['fields']     ['nf_total_fat'],
+                    }, {
+                        name: 'Carbohydrates',
+                        y: results[0].data['hits'][0]   ['fields']         ['nf_total_carbohydrate'],
+                    }]
+                }]
+            })
+                
             })
         }
-        // saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
 
         function queryFood() {
             console.log('hello')
@@ -269,8 +294,12 @@
             })
         }
 
-</script>
 
+    </script>
+
+
+
+    
 
 {% endblock %}
 
