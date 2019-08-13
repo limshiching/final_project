@@ -7,8 +7,6 @@ from models.daily_intake import DailyIntake
 import requests
 from flask_login import current_user
 import datetime
-from highcharts import Highchart
-
 
 images_blueprint = Blueprint('images',
     __name__, template_folder='templates')
