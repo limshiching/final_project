@@ -1,0 +1,47 @@
+{% extends "_layout.html" %}
+{% block content %}
+
+<style>
+
+#about-title {
+    font-family: 'Righteous', cursive;  
+}
+
+#about-header {
+    font-family: 'Lobster', cursive;
+    font-size: 30px;
+}
+#about-text {
+    font-family: 'Nunito', sans-serif;
+}
+
+</style>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title class=>Login</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+        <style> @import url('https://fonts.googleapis.com/css?family=Righteous&display=swap');</style>
+        <style>@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');</style>
+        <style>@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');</style>
+
+	</head>
+	<body>
+
+        <div class="container" style="margin: 50px; text-align: justify">
+
+        <h1 id="about-title"> The Idea Behind SugarCombat </h1>
+            <div class="card w-50" style="padding: 1em">
+                <p id="about-header"> "A healthy outside starts from the inside."</p>
+
+                <p id="about-text">
+                SugarCombat was born from the idea to assist users in monitoring their daily sugar intake and calorie consumption with easy convenience and utmost practicality; as well as to give more understanding about the nutritional value of the food they take.
+                </p>
+
+        </div>
+	</body>
+</html>
+
+{% endblock %}

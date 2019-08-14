@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
-from flask import Flask, Blueprint, render_template, request, flash, redirect, url_for, request
-from werkzeug.security import generate_password_hash
+from flask import Flask, Blueprint, render_template, request, flash, redirect, url_for, request, session
+from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from models.user import User
 from models.daily_intake import DailyIntake
@@ -56,13 +56,49 @@ def google_login():
     name = profile['name']
     email = oauth.google.get(
         'https://www.googleapis.com/oauth2/v2/userinfo').json()['email']
-    user = User(name=name, email=email)
-    if user.save():
-        login_user(user)
-        return redirect(url_for('users.edit'))
+    user = User.get_or_none(User.email == email)
+    if user == None:
+        user = User(name=name, email=email)
+        if user.save():
+            login_user(user)
+            return redirect(url_for('users.edit'))
+        else:
+            return redirect(url_for('users.create'))
     else:
-        return redirect(url_for('users.create'))    
+        login_user(user)
+        flash('Welcome, successfully signed in.')
+        return redirect(url_for('home', id=user.id))
 
+
+@users_blueprint.route('/facebook', methods=["GET"])
+def facebook():
+    redirect_uri = "http://localhost:5000/users/facebook/login"
+    return oauth.facebook.authorize_redirect(redirect_uri, state=session['csrf_token'])
+
+
+@users_blueprint.route('/facebook/login', methods=["GET"])
+def facebook_login():
+    token = oauth.facebook.authorize_access_token()
+    facebook_id = oauth.facebook.get(
+        "https://graph.facebook.com/v3.2/me").json()["id"]
+
+    user_data = oauth.facebook.get(
+        f"https://graph.facebook.com/v3.2/{facebook_id}?fields=id,name,email").json()
+    email = user_data['email']
+    name = user_data['name']
+
+    user = User.get_or_none(User.email == email)
+    if user == None:
+        user = User(name=name, email=email)
+        if user.save():
+            login_user(user)
+            return redirect(url_for('users.edit'))
+        else:
+            return redirect(url_for('users.create'))
+    else:
+        login_user(user)
+        flash('Welcome, successfully signed in.')
+        return redirect(url_for('home', id=user.id))
 
 
 @users_blueprint.route('/edit', methods=["GET"])
