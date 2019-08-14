@@ -15,6 +15,7 @@ bundles = {
         'css/custom.css',
         'css/login.css',
         'css/background.css',
+        'css/google.css',
         filters='cssmin',
         output='gen/home.%(version)s.css'),
 

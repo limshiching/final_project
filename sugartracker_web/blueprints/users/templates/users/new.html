@@ -2,84 +2,102 @@
 {% block content %}
 
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Register</title>
-		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-        <style> @import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');</style>
-    </head>
-    
-	<body>
-		<div class="register">
-			<h1 class="text-center">Registration</h1>
-			<div class="links">
-				<a href="{{ url_for('sessions.login') }}">Login</a>
-				<a href="{{ url_for('users.create') }}" class="active">Register</a>
-            </div>
-            
-			<form action="{{ url_for('users.create') }}" method="POST" autocomplete="off">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                
-				<label for="username">
-					<i class="fas fa-user"></i>
-                </label>
-                <input type="text" class="form-control" name="fullname" placeholder="Enter full name" required>
 
-                <label for="email">
-                    <i class="fas fa-envelope"></i>
-                </label>
-                <input type="email" class="form-control" name="email" placeholder="Enter e-mail address" id="email" required>
-                
-				<label for="password">
-					<i class="fas fa-lock"></i>
-				</label>
-                <input type="password" class="form-control" name="password" placeholder="Enter Password" id="password" required>		
-                
-                <label for="gender">
-                    <i class="fas fa-venus-mars"></i>
-                </label>
-                <select id="gender" class="form-control" name="gender">
-                    <option>Female</option>
-                    <option>Male</option>
-                </select>
+<head>
+    <meta charset="utf-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');
+    </style>
+</head>
 
-                <label for="activty">
-                    <i class="fas fa-running"></i>
-                </label>
-                <select id="activity" class="form-control" name="activity">
-                    <option>Very light</option>
-                    <option>Light</option>
-                    <option>Moderate</option>
-                    <option>Heavy</option>
-                    <option>Very Heavy</option>
-                </select>
-
-                <label for="height">
-                    <i class="fas fa-user"></i>
-                </label>
-                <input type="height" class="form-control" name="length" placeholder="Enter height in centimeters" required>
-
-                <label for="weight">
-                    <i class="fas fa-weight"></i>
-                </label>
-                <input type="weight" class="form-control"
-                name="weight" placeholder="Enter weight in Kilo's" required>
-
-                <label for="birthday">
-                    <i class="fas fa-birthday-cake"></i>
-                </label>
-                <input type="date" class="form-control" id="date" name="date" placeholder="YYYY/MM/DD" />
-                
-				<div class="msg">{{ msg }}</div>
-                <input type="submit" value="Register">
-            </form>
-
+<body>
+    <div class="register">
+        <h1 class="text-center">Registration</h1>
+        <div class="links">
+            <a href="{{ url_for('sessions.login') }}">Login</a>
+            <a href="{{ url_for('users.create') }}" class="active">Register</a>
         </div>
 
-        
-	</body>
+        <form action="{{ url_for('users.create') }}" method="POST" autocomplete="off">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <label for="username">
+                <i class="fas fa-user"></i>
+            </label>
+            <input type="text" class="form-control" name="fullname" placeholder="Enter full name" required>
+
+            <label for="email">
+                <i class="fas fa-envelope"></i>
+            </label>
+            <input type="email" class="form-control" name="email" placeholder="Enter e-mail address" id="email"
+                required>
+
+            <label for="password">
+                <i class="fas fa-lock"></i>
+            </label>
+            <input type="password" class="form-control" name="password" placeholder="Enter Password" id="password"
+                required>
+
+            <label for="gender">
+                <i class="fas fa-venus-mars"></i>
+            </label>
+            <select id="gender" class="form-control" name="gender">
+                <option>Female</option>
+                <option>Male</option>
+            </select>
+
+            <label for="activty">
+                <i class="fas fa-running"></i>
+            </label>
+            <select id="activity" class="form-control" name="activity">
+                <option>Very light</option>
+                <option>Light</option>
+                <option>Moderate</option>
+                <option>Heavy</option>
+                <option>Very Heavy</option>
+            </select>
+
+            <label for="height">
+                <i class="fas fa-user"></i>
+            </label>
+            <input type="height" class="form-control" name="length" placeholder="Enter height in centimeters" required>
+
+            <label for="weight">
+                <i class="fas fa-weight"></i>
+            </label>
+            <input type="weight" class="form-control" name="weight" placeholder="Enter weight in Kilo's" required>
+
+            <label for="birthday">
+                <i class="fas fa-birthday-cake"></i>
+            </label>
+            <input type="date" class="form-control" id="date" name="date" placeholder="YYYY/MM/DD" />
+
+            <div class="msg">{{ msg }}</div>
+            <input type="submit" value="Register">
+            <div id='social' style='text-align: center;'>
+                <hr>
+                <a href="{{url_for('users.google')}}" style='display:inline-block;padding-bottom:1.5vh;'><img
+                        id='googlish' style="width:18vw; height: 5vh; object-fit: cover; border:2px solid black; "
+                        src=" {{url_for('static', filename='google_button.png')}}"></a>
+                <br>
+
+                <a href="{{url_for('users.facebook')}}" style='display:inline-block;padding-bottom:1.5vh;'> <img
+                        id='facebook' style="width: 18.2vw; height:5vh;"
+                        src="{{url_for('static', filename='18928641_251957295286418_4362086450741641216_n.png')}}"></a>
+            </div>
+
+
+
+        </form>
+
+    </div>
+
+
+</body>
+
 </html>
 
 {% endblock %}
-

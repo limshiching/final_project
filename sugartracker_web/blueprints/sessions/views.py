@@ -6,18 +6,21 @@ from flask_login import login_user, logout_user, login_manager, current_user
 from sugartracker_web.util.oauth import oauth
 
 sessions_blueprint = Blueprint('sessions',
-                            __name__,
-                            template_folder='templates')
+                               __name__,
+                               template_folder='templates')
+
 
 @sessions_blueprint.route('/new', methods=['GET'])
 def new():
     return render_template('sessions/new.html')
 
+
 @sessions_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     return render_template('home.html', msg='')
 
-@sessions_blueprint.route('/create', methods= ['POST'])
+
+@sessions_blueprint.route('/create', methods=['POST'])
 def create():
     email = request.form.get('email')
     password = request.form.get('password')
@@ -36,25 +39,18 @@ def create():
     flash('Welcome, successfully signed in.')
     return redirect(url_for('home', id=user.id))
 
-@sessions_blueprint.route('new/google', methods=['GET'])
-def google_login():
-    redirect_uri = url_for('sessions.authorize', _external=True)
+
+@sessions_blueprint.route('/google', methods=['GET'])
+def google():
+    redirect_uri = "http://localhost:5000/users/google/login"
     return oauth.google.authorize_redirect(redirect_uri)
 
-@sessions_blueprint.route('authorize/google', methods=['GET'])
-def authorize():
-    token = oauth.google.authorize_access_token()
-    response = oauth.google.get('https://www.googleapis.com/oauth2/v2/userinfo')
-    email = response.json()['email']
 
-    user = User.get_or_none(User.email == email)
+@sessions_blueprint.route('/facebook', methods=['GET'])
+def facebook():
+    redirect_uri = "http://localhost:5000/users/facebook/login"
+    return oauth.facebook.authorize_redirect(redirect_uri, state=session['csrf_token'])
 
-    if not user:
-        flash('Failed')
-        return render_template('new.html')
-
-    login_user(user)
-    return redirect(url_for('foods.show', id=user.id))
 
 @sessions_blueprint.route('/logout')
 def logout():
@@ -62,6 +58,3 @@ def logout():
         logout_user()
         flash('Logged out successfully')
     return redirect(url_for('home'))
-        
-
-
