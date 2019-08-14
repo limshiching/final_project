@@ -853,3 +853,15 @@ body.loggedin {
   padding: 5px;
   margin: 0 0 10px 0;
 }
+/* NAVBAR */
+
+#navbar {
+	display: flex;
+	background-color: black;
+	transform: translateY(-100%);
+	transition: transform .5s cubic-bezier(.4, 0, .2, 1);
+  }
+
+  .nav-container:hover #navbar {
+	transform: translateY(0);
+  }

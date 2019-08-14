@@ -1,53 +1,56 @@
 {% extends "_layout.html" %}
+{% from "macros/navbar.html" import navbar with context %}
+{{ navbar()}}
 {% block header %}
 <style>
+    @import 'https://code.highcharts.com/css/highcharts.css';
 
-@import 'https://code.highcharts.com/css/highcharts.css';
+    #container {
+        height: 400px;
+        max-width: 800px;
+        min-width: 320px;
+        margin: 0 auto;
+    }
 
-#container {
-	height: 400px;
-	max-width: 800px;
-	min-width: 320px;
-	margin: 0 auto;
-}
-.highcharts-pie-series .highcharts-point {
-	stroke: black;
-	stroke-width: 2px;
-}
-.highcharts-pie-series .highcharts-data-label-connector {
-	stroke: silver;
-	stroke-dasharray: 2, 2;
-	stroke-width: 2px;
-}
-    
+    .highcharts-pie-series .highcharts-point {
+        stroke: black;
+        stroke-width: 2px;
+    }
+
+    .highcharts-pie-series .highcharts-data-label-connector {
+        stroke: silver;
+        stroke-dasharray: 2, 2;
+        stroke-width: 2px;
+    }
 </style>
 
 <head>
-<link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
-<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Archivo+Black">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Archivo+Black">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
 </head>
 
 {% endblock %}
 {% block content %}
 
+<div id="container-fluid">
 
-    <div id="container-fluid">
-        
-        <div id="sidebar">
-            <h1 class="text-center">Track your health.</h1>
-            <p class="text-center">Upload a photo of your meal & get the nutritional breakdown.</p>
+    <div id="sidebar">
+        <h1 class="text-center">Track your health.</h1>
+        <p class="text-center">Upload a photo of your meal & get the nutritional breakdown.</p>
         <br>
 
         <form action="#">
-            <input type="file" id="filename" placeholder="Filename" size="100"/>
-            <button onclick="predict_click($('#filename').val(), 'file'); return false;">Get my Nutritional Breakdown!</button>
+            <input type="file" id="filename" placeholder="Filename" size="100" />
+            <button onclick="predict_click($('#filename').val(), 'file'); return false;">Get my Nutritional
+                Breakdown!</button>
         </form>
-        
+
         <div id="predictions">
             <div class="food-photo">
                 <div class="step"><span>1</span> Upload a Photo</div>
@@ -55,113 +58,111 @@
             <div class="nutrition">
                 <div class="step"><span>2</span> Get a Nutritional Breakdown</div>
                 <div id="concepts"></div>
-                <button id="save-results" class="btn btn-primary">Save Results</button>
-            
+                <button id="save-results" class="btn btn-primary">Get Results</button>
+
 
             </div>
         </div>
 
         <div class="powered-by">
-            <p> Powered by <img src="https://clarifai.com/static/images/logo.png" alt="Clarifai" />.</p>
+            <p> Powered by <img src="https://pbs.twimg.com/profile_images/973226386486829057/a_xn4grB_400x400.jpg"
+                    alt="Clarifai" /> Clarifai</p>
             <p> If no image to upload, click <a href=" {{ url_for('foods.new') }}"> here</a> to key in food. </p>
-            </div>
-           
         </div>
 
-        <div id="nutrition-info" role="alert">
-            <div id="nutrition-column" ></div>
-        </div>
-
-                         
-                            </div>
-                        </div>
-                </div>
-         </div>
     </div>
+
+    <div id="nutrition-info" role="alert">
+        <div id="nutrition-column"></div>
+
+    </div>
+
+
 </div>
 <script>
-        let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
-        let chosenConcepts = []
-        // let saveRsltBtn = document.getElementById('save-results')
-        
-        $('#filename').change(() => {
-            $('#concepts').html('')
-        })
-        
-        let app = new Clarifai.App({apiKey: myClarifaiApiKey});
-        app.models.initModel({id:Clarifai.FOOD_MODEL})
-        
-        function predict_click(value, source) {
-            let preview = $(".food-photo");
-            let file    = document.querySelector("input[type=file]").files[0];
-            let loader  = "https://s3.amazonaws.com/static.mlh.io/icons/loading.svg";
-            let reader  = new FileReader();
-        
-          // load local file picture
-            reader.addEventListener("load", function () {
-                preview.attr('style', 'background-image: url("' + reader.result + '");');
-                doPredict({ base64: reader.result.split("base64,")[1] },queryFood);
-            }, false);
-            console.log(reader)
-        
-            if (file) {
-                reader.readAsDataURL(file);
-                // $('#concepts').html('<img src="' + loader + '" class="loading" />');
-            } else { alert("No file selcted!"); }
-        }
-        
-        function doPredict(value,callback) {
-            console.log(value)
-            app.models.predict(Clarifai.FOOD_MODEL, value).then(function(response) {
-                console.log(response)
-                if(response.rawData.outputs[0].data.hasOwnProperty("concepts")) {
-                    let concepts = response.rawData.outputs[0].data.concepts;
-        
-                    if (concepts.length > 10){
-                        concepts = concepts.slice(0, 9)
-                    }
-        
-                    concepts.map((concept) => {
-                        $('#concepts').append(`<li style="list-style: none;"><input class="concepts-check" type="checkbox" value="${concept.name}">${concept.name}</input></li>`);
-                    })
-                    console.log(concepts)
-                    callback()
-        
+    let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
+    let chosenConcepts = []
+
+    // let saveRsltBtn = document.getElementById('save-results')
+
+    $('#filename').change(() => {
+        $('#concepts').html('')
+    })
+
+    let app = new Clarifai.App({ apiKey: myClarifaiApiKey });
+    app.models.initModel({ id: Clarifai.FOOD_MODEL })
+
+    function predict_click(value, source) {
+        let preview = $(".food-photo");
+        let file = document.querySelector("input[type=file]").files[0];
+        let loader = "https://s3.amazonaws.com/static.mlh.io/icons/loading.svg";
+        let reader = new FileReader();
+
+        // load local file picture
+        reader.addEventListener("load", function () {
+            preview.attr('style', 'background-image: url("' + reader.result + '");');
+            doPredict({ base64: reader.result.split("base64,")[1] }, queryFood);
+        }, false);
+        console.log(reader)
+
+        if (file) {
+            reader.readAsDataURL(file);
+            // $('#concepts').html('<img src="' + loader + '" class="loading" />');
+        } else { alert("No file selcted!"); }
+    }
+
+    function doPredict(value, callback) {
+        console.log(value)
+        app.models.predict(Clarifai.FOOD_MODEL, value).then(function (response) {
+            console.log(response)
+            if (response.rawData.outputs[0].data.hasOwnProperty("concepts")) {
+                let concepts = response.rawData.outputs[0].data.concepts;
+
+                if (concepts.length > 10) {
+                    concepts = concepts.slice(0, 9)
                 }
-            });
-        }
-       
-        $('#save-results').click(() => {
-            let form = document.getElementById('query').value
-            if (form != ""){
-                chosenConcepts.push(form)
+
+                concepts.map((concept) => {
+                    $('#concepts').append(`<li style="list-style: none;"><input class="concepts-check" type="checkbox" value="${concept.name}">${concept.name}</input></li>`);
+                })
+                console.log(concepts)
+                callback()
+
             }
-            $('input[type=checkbox]').each(function(){
-                let value;
-                if (this.checked){
-                    value = $(this).val()
-                    chosenConcepts.push(value)
-                }
-            })
-            sentData(chosenConcepts,dailyIntake)
-            dailyIntake(chosenConcepts)
-            console.log(chosenConcepts)
+        });
+    }
+
+    $('#save-results').click(() => {
+        let form = document.getElementById('query').value
+        if (form != "") {
+            chosenConcepts.push(form)
+        }
+        $('input[type=checkbox]').each(function () {
+            let value;
+            if (this.checked) {
+                value = $(this).val()
+                chosenConcepts.push(value)
+            }
         })
-        
-        let ttlSugar = []
-        let ttlFat = []
-        function sentData(concepts,callback){
-            fetch("http://localhost:5000/images/check", {
-                method: "POST",
-                body: JSON.stringify(concepts),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then((response) => response.json())
+        sentData(chosenConcepts, dailyIntake)
+        dailyIntake(chosenConcepts)
+        console.log(chosenConcepts)
+    })
+
+    let ttlSugar = []
+    let ttlFat = []
+    function sentData(concepts, callback) {
+        fetch("http://localhost:5000/images/check", {
+            method: "POST",
+            body: JSON.stringify(concepts),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => response.json())
             .then((response) => {
                 console.log(response);
                 results = response.results
-                results.map((result)=>{
+                results.map((result) => {
                     $('#nutrition-info').append(`
                     <div id="info" style="width: 50%; display:flex-wrap; background: white">
                     <div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style="width: 300px; background: white;">
@@ -254,7 +255,7 @@
 
 
                     `)
-                    
+
                     ttlSugar.push(result.data['hits'][0]['fields']['nf_sugars'])
                     ttlFat.push(result.data['hits'][0]['fields']['nf_saturated_fat'])
 
@@ -265,7 +266,7 @@
                             plotShadow: false,
                             type: 'pie'
                         },
-                        title : {
+                        title: {
                             text: 'Source of Calories'
                         },
                         tooltip: {
@@ -286,110 +287,107 @@
                             colorByPoint: true,
                             data: [{
                                 name: 'Protein',
-                                y: result.data['hits'][0]['fields']     ['nf_protein'] ,
+                                y: result.data['hits'][0]['fields']['nf_protein'],
                                 sliced: true,
                                 selected: true
                             }, {
                                 name: 'Fats',
-                                y: result.data['hits'][0]['fields']     ['nf_total_fat'],
+                                y: result.data['hits'][0]['fields']['nf_total_fat'],
                             }, {
                                 name: 'Carbohydrates',
-                                y: result.data['hits'][0]['fields']         ['nf_total_carbohydrate'],
+                                y: result.data['hits'][0]['fields']['nf_total_carbohydrate'],
                             }]
                         }]
                     })
                 });
                 callback()
             })
-        }
+    }
 
-        function dailyIntake() {
-            $('#nutrition-column').append(`
+    function dailyIntake() {
+        $('#nutrition-column').append(`
                 <div id="dailyIntake" style=" margin: 0 auto"></div>
             `)
-            const reducer = (accumulator, currentValue) => accumulator + currentValue;
-            sumSugar = (ttlSugar.reduce(reducer,0));
-            sumFat = (ttlFat.reduce(reducer,0));
-          
-            Highcharts.chart('dailyIntake', {
-                chart: {
-                    type: 'column'
-                },
+        const reducer = (accumulator, currentValue) => accumulator + currentValue;
+        sumSugar = (ttlSugar.reduce(reducer, 0));
+        sumFat = (ttlFat.reduce(reducer, 0));
+
+        Highcharts.chart('dailyIntake', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Total Amount of Sugar and Saturated Fats Consumed for 14.08.2019'
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
                 title: {
-                    text: 'Total Amount of Sugar and Saturated Fats'
-                },
-                subtitle: {
-                    text: 'Click the columns to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
-                },
-                xAxis: {
-                    type: 'category'
-                },
-                yAxis: {
-                    title: {
-                        text: 'Total gram'
+                    text: 'Total gram'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y:.1f}g'
                     }
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.y:.1f}g'
-                        }
-                    }
-                },
-                tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
-                },
-                series: [
-                    {
-                        name: "Daily Consumption",
-                        colorByPoint: true,
-                        data: [
-                            {
-                                name: "Total Sugar",
-                                y: sumSugar,
-                            },
-                            {
-                                name: "Total Saturated Fat",
-                                y: sumFat,
-                            },
-                        ]
-                    }
-                ],
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
+            },
+            series: [
+                {
+                    name: "Daily Consumption",
+                    colorByPoint: true,
+                    data: [
+                        {
+                            name: "Total Sugar",
+                            y: sumSugar,
+                        },
+                        {
+                            name: "Total Saturated Fat",
+                            y: sumFat,
+                        },
+                    ]
+                }
+            ],
 
-});
-        }
+        });
+    }
 
-        
-        // saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
-        
-        function queryFood() {
-            $('#concepts').append( 
-                `<form action="{{ url_for('foods.search') }}" method="POST">
+
+    // saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
+
+    function queryFood() {
+        $('#concepts').append(
+            `<form action="{{ url_for('foods.search') }}" method="POST">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <div class="form-group">
                         <label for="item_name"> Did we miss out anything?  </label>
                         <input id="query" type="text" name="item_name" class="form-control" />
                         </div>
                 </form>`)
-        
-            concepts.map((concept) => {
-                $('#concepts').append(`${query.item_name}'`)
-            })
-        }
 
-    
-
-    </script>
+        concepts.map((concept) => {
+            $('#concepts').append(`${query.item_name}'`)
+        })
+    }
 
 
 
-    
+</script>
+
+
+
+
 
 {% endblock %}
 
@@ -397,4 +395,3 @@
 <!-- git pull origin master --rebase -->
 <!-- git checkout <your branch> -->
 <!-- git merge master -->
-

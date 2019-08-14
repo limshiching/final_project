@@ -41,22 +41,33 @@ body{
 
 #sidebar {
     float : left;
-    width : 50%;
+    width : 45%;
     padding : 1em;
     background: white;
     position: fixed;
     border: solid black 1px;
     height: 100vh;
+    margin-left: 2vw;
+    background: rgba(250,253,255,1);
+background: -moz-linear-gradient(left, rgba(250,253,255,1) 0%, rgba(179,214,255,1) 100%);
+background: -webkit-gradient(left top, right top, color-stop(0%, rgba(250,253,255,1)), color-stop(100%, rgba(179,214,255,1)));
+background: -webkit-linear-gradient(left, rgba(250,253,255,1) 0%, rgba(179,214,255,1) 100%);
+background: -o-linear-gradient(left, rgba(250,253,255,1) 0%, rgba(179,214,255,1) 100%);
+background: -ms-linear-gradient(left, rgba(250,253,255,1) 0%, rgba(179,214,255,1) 100%);
+background: linear-gradient(to right, rgba(250,253,255,1) 0%, rgba(179,214,255,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafdff', endColorstr='#b3d6ff', GradientType=1 );
+
 }
 
 #nutrition-info {
     float: right;
-    width: 50%;
+    width: 45%;
     background: transparent;
     display: flex;
     flex-wrap: wrap;
     overflow-y: scroll;
     height: auto;
+    margin-right: 2vw;
 }
 
 #nutrition-column {
