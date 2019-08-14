@@ -1,6 +1,5 @@
 {% extends "_layout.html" %}
 {% block title %}
-Homepage
 {% endblock %}
 {% block header %}
 {% endblock %}
@@ -17,6 +16,7 @@ Homepage
 		
 	</head>
 	<body>
+
 		{% if current_user.is_authenticated %}
 		<div class="container" style="margin: 50px; text-align: justify">
 			<h1 class="home-title"> Sugar Combat</h1>
@@ -34,7 +34,9 @@ Homepage
 		</div>
 		</div>
 		{% else %}
+		
 		<div class="login">
+			
             <h1 class="text-center">Existing Users</h1>
             <div class="links">
                     <a href="{{ url_for('sessions.login') }}" class="active">Login</a>
