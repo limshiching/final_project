@@ -1,6 +1,5 @@
 {% extends "_layout.html" %}
 {% block title %}
-Homepage
 {% endblock %}
 {% block header %}
 {% endblock %}
@@ -8,28 +7,23 @@ Homepage
 
 <html>
 
-<head>
-	<meta charset="utf-8">
-	<title class=>Login</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-	<style>
-		@import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');
-	</style>
-	<style>
-		@import url('https://fonts.googleapis.com/css?family=Righteous&display=swap');
-	</style>
+	<head>
+		<meta charset="utf-8">
+		<title class=>Login</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		<style> @import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');</style>
+		<style> @import url('https://fonts.googleapis.com/css?family=Righteous&display=swap');</style>
+		
+	</head>
+	<body>
 
-</head>
-
-<body>
-	{% if current_user.is_authenticated %}
-	<div class="container" style="margin: 20px; text-align: justify">
-		<h1 class="home-title"> Sugar Combat</h1>
-		<div class="card w-25" style="padding: 1em">
-			<p class="quotes"> “To ensure good health: eat lightly, breathe deeply, live moderately, cultivate
-				cheerfulness, and maintain an interest in life.” -William Londen </p>
-
+		{% if current_user.is_authenticated %}
+		<div class="container" style="margin: 50px; text-align: justify">
+			<h1 class="home-title"> Sugar Combat</h1>
+			<div class="card w-25" style="padding: 1em">
+			<p class="quotes"> “To ensure good health: eat lightly, breathe deeply, live moderately, cultivate cheerfulness, and maintain an interest in life.” -William Londen </p>
+			
 			Where would like to navigate to?
 			<div style="padding: 2px"></div>
 
@@ -78,6 +72,32 @@ Homepage
 	{% endif %}
 </body>
 
+		{% else %}
+		
+		<div class="login">
+			
+            <h1 class="text-center">Existing Users</h1>
+            <div class="links">
+                    <a href="{{ url_for('sessions.login') }}" class="active">Login</a>
+                    <a href="{{ url_for('users.new') }}">Register</a>
+            </div>
+			<form action="{{ url_for('sessions.create') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+				<label for="email">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="email" placeholder="email" required>
+				<label for="password">
+					<i class="fas fa-lock"></i>
+				</label>
+                <input type="password" name="password" placeholder="Password" id="password" required>
+                
+				<div class="msg">{{ msg }}</div>
+				<input type="submit" value="Login">
+			</form>            
+		</div>
+		{% endif %}
+	</body>
 </html>
 
 {% endblock %}

@@ -1,26 +1,25 @@
 {% extends "_layout.html" %}
+{% block header %}
+
+    <link rel="stylesheet" type="text/css" media="all" href="../../nutritionLabel-min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="./../css/demo.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Archivo+Black">
+
+{% endblock %}
 {% block content %}
 
-<head>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" media="all" href="../../nutritionLabel-min.css">
-        <link rel="stylesheet" type="text/css" media="all" href="./../css/demo.css">
-        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Archivo+Black">
-</head>
-
-<body>
-    
-<div class="col-md-4">
-    <div id="test2"><div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style=" width: 280px;">
+    <div class="col-md-4">
+        <div id="test2"><div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style=" width: 280px;">
 <div class="title" tabindex="0">Nutrition Facts</div>
 <div class="cf">
 <div class="rel servingSizeField">
 <div class="setter">
+    
     <a href="Increase the Quantity Arrow" class="unitQuantityUp" aria-label="Increase the Quantity Arrow" rel="nofollow" tabindex="0"></a>
     <a href="Decrease the Quantity Arrow" class="unitQuantityDown" aria-label="Decrease the Quantity Arrow" rel="nofollow" tabindex="0"></a>
-
-<input type="text" value="1" class="unitQuantityBox" aria-label="Change the Quantity Textbox">
-<input type="hidden" value="1" id="nixLabelBeforeQuantity">
+    
+    <input type="hidden" value="1" id="nixLabelBeforeQuantity" />
+    <!-- <input type="text" value="1" class="unitQuantityBox" aria-label="Change the Quantity Textbox" /> -->
 </div><!-- closing class="servingSizeField" -->
 
 <div class="name inline" tabindex="0"> {{item_name.capitalize()}} </div>
@@ -105,17 +104,5 @@ Iron
 </div>
 </div>
     </div>
-
-    <p> Daily Recommended Sugar Intake Per Day = 25g</p>
-    <p> Sugar Intake For This Meal : {{data['hits'][0]['fields']['nf_sugars']}} g </p>
-    <p> Current Intake For The Day = {nf</p>
-</body>
-
-
-<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
-
-<script type="text/javascript" src="/bower_components/nutrition-label-jquery-plugin/dist/js/nutritionLabel-min.js"></script>
-    
-
 
 {% endblock %}

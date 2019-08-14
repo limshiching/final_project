@@ -8,23 +8,32 @@ import requests
 from flask_login import current_user
 import datetime
 
-
 images_blueprint = Blueprint('images',
                              __name__, template_folder='templates')
 
 
 @images_blueprint.route('/new', methods=['GET'])
+@csrf.exempt
 def new():
+
+
+    # food_items = DailyIntake.select().where(DailyIntake.item_name == 'burger')
+    # print(food_items)
+    
+
+    # for item in food_items:
+
     return render_template('images/new.html')
-
-
+    
 @images_blueprint.route('/check', methods=['POST'])
 @csrf.exempt
 def check():
-    items = request.json  # get data from function sendData
+    items = request.json #get data from function sendData
+    results=[]
 
     for item in items:
 
+        
         nutritionix_id = os.getenv('NUTRITION_APP_ID')
         nutritionix_key = os.getenv('NUTRITION_APP_KEY')
 
@@ -34,22 +43,19 @@ def check():
 
         sugar = data['hits'][0]['fields']['nf_sugars']
         calories = data['hits'][0]['fields']['nf_calories']
-        u = DailyIntake(item_name=item, sugar_amount=sugar, calories=calories,
-                        user=current_user.id, date=datetime.datetime.now())
 
-        if u.save():
-            response = {
-                'message': 'Success'
-            }
+        u = DailyIntake(item_name=item,sugar_amount=sugar,calories=calories,user=current_user.id,date=datetime.datetime.now())
+            
+        if u.save(): #turn into an object, so from object can get the name, data
+            nutrition = {
+                'item' : item,
+                'data': data
+            } 
+            results.append(nutrition)           
+    response = {
+        'message':'success',
+        'results':results
+    }
+    return make_response(jsonify(response)), 200
 
-    return make_response(jsonify(response), 200)
 
-
-# how to make a chart
-# @images_blueprint.route('graph')
-# def first_garph():
-#     data = {}
-#         return render_template('', data=data)
-
-    # for item in request.json:
-    #     print(item['name']) #the value is determine value of the image prediction
