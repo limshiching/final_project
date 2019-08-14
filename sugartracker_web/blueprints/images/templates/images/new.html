@@ -1,5 +1,26 @@
 {% extends "_layout.html" %}
 {% block header %}
+<style>
+
+@import 'https://code.highcharts.com/css/highcharts.css';
+
+#container {
+	height: 400px;
+	max-width: 800px;
+	min-width: 320px;
+	margin: 0 auto;
+}
+.highcharts-pie-series .highcharts-point {
+	stroke: black;
+	stroke-width: 2px;
+}
+.highcharts-pie-series .highcharts-data-label-connector {
+	stroke: silver;
+	stroke-dasharray: 2, 2;
+	stroke-width: 2px;
+}
+    
+</style>
 
 <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Archivo+Black">
@@ -11,8 +32,8 @@
 {% endblock %}
 {% block content %}
 
-    <div id="container-fluid" style="padding: 1em">
 
+    <div id="container-fluid">
         
         <div id="sidebar" style="border: 1px solid black">
             <h1 class="text-center">Track your health.</h1>
@@ -23,6 +44,7 @@
                 <input type="file" id="filename"  placeholder="Filename" size="100"/>
                 <button class="btn btn-outline-info" onclick="predict_click($('#filename').val(), 'file'); return false;">Get my Nutritional Breakdown!</button>
             </form>
+
             
             <div id="predictions">
                 <div class="food-photo">
@@ -35,19 +57,29 @@
                     <button id="save-results" class="btn btn-success">Show Results</button>
                 </div>
             </div>
-            
+
+        </div>
+
 
             <div class="powered-by">
                 <!-- <p> Powered by <img src="https://pbs.twimg.com/profile_images/973226386486829057/a_xn4grB_400x400.jpg" alt="Clarifai" /> Clarifai</p> -->
                 <p> If no image to upload, click <a href=" {{ url_for('foods.new') }}"> here</a> to key in food. </p>
             </div>
+           
         </div>
-        <div>
-            <div id="nutrition-info" role="alert" style="display: flex; flex-wrap: wrap"></div>
-            <div id="chart-container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
-        </div>
-    </div>
 
+        <div id="nutrition-info" role="alert">
+            <div id="nutrition-column" ></div>
+        </div>
+
+
+                         
+                            </div>
+                        </div>
+                </div>
+         </div>
+    </div>
+</div>
 
 <script>
         let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
@@ -64,6 +96,8 @@
         function predict_click(value, source) {
             let preview = $(".food-photo");
             let file    = document.querySelector("input[type=file]").files[0];
+            let loader  = "https://s3.amazonaws.com/static.mlh.io/icons/loading.svg";
+
             let reader  = new FileReader();
         
           // load local file picture
@@ -78,14 +112,13 @@
                 $('#concepts').html('<img id="img-loader" src="' + loader + '" class="loading" />');
             } else { alert("No file selcted!"); }
         }
-
-        //predict image
+        
         function doPredict(value,callback) {
             console.log(value)
             app.models.predict(Clarifai.FOOD_MODEL, value).then(function(response) {
                 console.log(response)
                 if(response.rawData.outputs[0].data.hasOwnProperty("concepts")) {
-                    let concepts = response.rawData.outputs[0].data.concepts; 
+                    let concepts = response.rawData.outputs[0].data.concepts;
         
                     if (concepts.length > 10){
                         concepts = concepts.slice(0, 9)
@@ -115,11 +148,14 @@
                     chosenConcepts.push(value)
                 }
             })
-            sentData(chosenConcepts)
+            sentData(chosenConcepts,dailyIntake)
+            dailyIntake(chosenConcepts)
             console.log(chosenConcepts)
         })
         
-        function sentData(concepts){
+        let ttlSugar = []
+        let ttlFat = []
+        function sentData(concepts,callback){
             fetch("http://localhost:5000/images/check", {
                 method: "POST",
                 body: JSON.stringify(concepts),
@@ -133,8 +169,8 @@
                 results = response.results
                 results.map((result)=>{
                     $('#nutrition-info').append(`
-                    <div id="info" style="width: 50%">
-                    <div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style=" width: 300px;">
+                    <div id="info" style="width: 50%; display:flex-wrap; background: white">
+                    <div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style="width: 300px; background: white;">
                     <div class="title" tabindex="0">Nutrition Facts</div>
                     <div class="cf">
                     
@@ -219,62 +255,128 @@
                     </div>
                     </div>
 
-                    <div id="chart-container" style="width: 50%;"></div>
+                    <div id="chart-container-${result.item}" style="width: 50%"></div>
+
                     </div>
 
 
                     `)
+                    
+                    ttlSugar.push(result.data['hits'][0]['fields']['nf_sugars'])
+                    ttlFat.push(result.data['hits'][0]['fields']['nf_saturated_fat'])
+
+                    Highcharts.chart(`chart-container-${result.item}`, {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title : {
+                            text: 'Source of Calories'
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>            {point.percentage:.1f}</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</  b>:           {point.percentage:.1f} '
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Foods',
+                            colorByPoint: true,
+                            data: [{
+                                name: 'Protein',
+                                y: result.data['hits'][0]['fields']     ['nf_protein'] ,
+                                sliced: true,
+                                selected: true
+                            }, {
+                                name: 'Fats',
+                                y: result.data['hits'][0]['fields']     ['nf_total_fat'],
+                            }, {
+                                name: 'Carbohydrates',
+                                y: result.data['hits'][0]['fields']         ['nf_total_carbohydrate'],
+                            }]
+                        }]
+                    })
                 });
+                callback()
 
-                Highcharts.chart('chart-container', {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-
-                title : {
-                    text: 'Source of Calories'
-                },
-
-                tooltip: {
-                    pointFormat: '{series.name}: <b> {point.percentage:.1f}%</b>'
-                },
-
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b>:{point.percentage:.1f} %'
-                        }
-                    }
-                },
-
-                series: [{
-                    name: 'Foods',
-                    colorByPoint: true,
-                    data: [{
-                        name: 'Protein',
-                        y: results[0].data['hits'][0]['fields']['nf_protein'] ,
-                        sliced: true,
-                        selected: true
-                    }, {
-                        name: 'Fats',
-                        y: results[0].data['hits'][0]['fields']['nf_total_fat'],
-                    }, {
-                        name: 'Carbohydrates',
-                        y: results[0].data['hits'][0]['fields']['nf_total_carbohydrate'],
-                    }]
-                }]
-            })
             })
         }
 
+        function dailyIntake() {
+            $('#nutrition-column').append(`
+                <div id="dailyIntake" style=" margin: 0 auto"></div>
+            `)
+            const reducer = (accumulator, currentValue) => accumulator + currentValue;
+            sumSugar = (ttlSugar.reduce(reducer,0));
+            sumFat = (ttlFat.reduce(reducer,0));
+          
+            Highcharts.chart('dailyIntake', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Total Amount of Sugar and Saturated Fats'
+                },
+                subtitle: {
+                    text: 'Click the columns to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Total gram'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f}g'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
+                },
+                series: [
+                    {
+                        name: "Daily Consumption",
+                        colorByPoint: true,
+                        data: [
+                            {
+                                name: "Total Sugar",
+                                y: sumSugar,
+                            },
+                            {
+                                name: "Total Saturated Fat",
+                                y: sumFat,
+                            },
+                        ]
+                    }
+                ],
+
+});
+        }
+
+        
+        // saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
+        
         function queryFood() {
-            console.log('hello')
             $('#concepts').append( 
                 `<form action="{{ url_for('foods.search') }}" method="POST">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -289,6 +391,7 @@
             })
         }
 </script>
+
 {% endblock %}
 
 <!-- git checkout master -->
