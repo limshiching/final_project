@@ -1,15 +1,12 @@
 {% extends "_layout.html" %}
 {% block header %}
 
-<head>
 <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/static.mlh.io/blog-code/2018-02-clarifai-nutrition-app/app.css" />
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Archivo+Black">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-</head>
 
 {% endblock %}
 {% block content %}
@@ -24,7 +21,7 @@
 
             <form action="#">
                 <input type="file" id="filename"  placeholder="Filename" size="100"/>
-                <button class="btn btn-warning" onclick="predict_click($('#filename').val(), 'file'); return false;">Get my Nutritional Breakdown!</button>
+                <button class="btn btn-outline-info" onclick="predict_click($('#filename').val(), 'file'); return false;">Get my Nutritional Breakdown!</button>
             </form>
             
             <div id="predictions">
@@ -35,14 +32,13 @@
                 <div class="nutrition">
                     <div class="step"><span>2</span> Get a Nutritional Breakdown</div>
                     <div id="concepts"></div>
-                    <br>
-                    <button id="save-results" class="btn btn-primary">Save Results</button>
+                    <button id="save-results" class="btn btn-success">Show Results</button>
                 </div>
             </div>
             
 
             <div class="powered-by">
-                <p> Powered by <img src="https://pbs.twimg.com/profile_images/973226386486829057/a_xn4grB_400x400.jpg" alt="Clarifai" /> Clarifai</p>
+                <!-- <p> Powered by <img src="https://pbs.twimg.com/profile_images/973226386486829057/a_xn4grB_400x400.jpg" alt="Clarifai" /> Clarifai</p> -->
                 <p> If no image to upload, click <a href=" {{ url_for('foods.new') }}"> here</a> to key in food. </p>
             </div>
         </div>
@@ -56,7 +52,7 @@
 <script>
         let myClarifaiApiKey = '068aa83b2a734fdd9275ab8a7dd0d66a';
         let chosenConcepts = []
-        let loader  = "https://media1.tenor.com/images/3aaadc45f4da67e52850a02aedf68040/tenor.gif?itemid=13427670";
+        let loader  = "https://ui-ex.com/images/transparent-background-loading.gif";
         
         $('#filename').change(() => {
             $('#concepts').html('')
@@ -107,7 +103,7 @@
         }
 
         $('#save-results').click(() => {
-            $('#nutrition-info').html('<img id="img-loader" src="' + loader + '" class="loading" />')
+            $('#nutrition-info').html('<img id="img-loader" src="' + loader + '" class="loading d-block mx-auto" style="margin-top: 200px; margin-bottom: 200px;" />')
             let form = document.getElementById('query').value
             if (form != ""){
                 chosenConcepts.push(form)
@@ -292,14 +288,7 @@
                 $('#concepts').append(`${query.item_name}'`)
             })
         }
-
-
-    </script>
-
-
-
-    
-
+</script>
 {% endblock %}
 
 <!-- git checkout master -->
