@@ -172,13 +172,16 @@ def show():
     weight = user.weight
     activity = user.activity
     food_sugar = DailyIntake.select().dicts()
-    sugar_amount = 0
+    sugar_amount = 0 
     calorie_amount = 0
     for food in food_sugar:
         if food['user'] == current_user.id:
             if food['date'] == datetime.date.today():
-                sugar_amount += round(food['sugar_amount'])
-                calorie_amount += round(food['calories'])
+                if food['sugar_amount']== None or food['sugar_amount']== 'Null':
+                    sugar_amount = 0
+                else:    
+                    sugar_amount += round(food['sugar_amount'])
+                    calorie_amount += round(food['calories'])
 
     if sugar_amount == 0:
         percentage_sugar = 0
