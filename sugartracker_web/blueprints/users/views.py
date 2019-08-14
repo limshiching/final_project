@@ -187,14 +187,16 @@ def show():
         percentage_sugar = 0
         sugar_left = sugar_daily
     else:
-        percentage_sugar = sugar_daily/sugar_amount*100
+        percentage_sugar = round(sugar_daily/sugar_amount*100)
         sugar_left = sugar_daily - sugar_amount
     if calorie_amount == 0:
         percentage_calories = 0
         calories_left = calories
     else:
-        percentage_calories = calories/calorie_amount*100
+        percentage_calories = round(calories/calorie_amount*100)
         calories_left = calories-calorie_amount
+        if calories_left < 0:
+            calories_left = 0
 
     return render_template('users/show.html', ps=percentage_sugar, sl=sugar_left, pc=percentage_calories, cl=calories_left, weight=weight, activity=activity, sugar_daily=sugar_daily, sugar_amount=sugar_amount, cal_intake=calories, calorie_amount=calorie_amount)
 
