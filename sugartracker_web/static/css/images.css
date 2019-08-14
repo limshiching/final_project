@@ -45,8 +45,8 @@ body{
     padding : 1em;
     background: white;
     position: fixed;
-    height: auto;
     border: solid black 1px;
+    height: 100vh;
 }
 
 #nutrition-info {
@@ -55,8 +55,11 @@ body{
     background: transparent;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     overflow-y: scroll;
     height: auto;
 }
 
+#nutrition-column {
+    width: 100%;
+    order: 1;
+}

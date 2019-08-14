@@ -82,9 +82,10 @@
            
         </div>
 
+        <div id="nutrition-info" role="alert">
+            <div id="nutrition-column" ></div>
+        </div>
 
-        <div id="nutrition-info" role="alert"></div>
-        <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 
                          
                             </div>
@@ -161,11 +162,14 @@
                     chosenConcepts.push(value)
                 }
             })
-            sentData(chosenConcepts)
+            sentData(chosenConcepts,dailyIntake)
+            dailyIntake(chosenConcepts)
             console.log(chosenConcepts)
         })
         
-        function sentData(concepts){
+        let ttlSugar = []
+        let ttlFat = []
+        function sentData(concepts,callback){
             fetch("http://localhost:5000/images/check", {
                 method: "POST",
                 body: JSON.stringify(concepts),
@@ -179,7 +183,7 @@
                 results = response.results
                 results.map((result)=>{
                     $('#nutrition-info').append(`
-                    <div id="info" style="width: 50% display:flex-wrap; background: white">
+                    <div id="info" style="width: 50%; display:flex-wrap; background: white">
                     <div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nutritionLabel" style="width: 300px; background: white;">
                     <div class="title" tabindex="0">Nutrition Facts</div>
                     <div class="cf">
@@ -271,6 +275,9 @@
 
 
                     `)
+                    
+                    ttlSugar.push(result.data['hits'][0]['fields']['nf_sugars'])
+                    ttlFat.push(result.data['hits'][0]['fields']['nf_saturated_fat'])
 
                     Highcharts.chart(`chart-container-${result.item}`, {
                         chart: {
@@ -283,7 +290,7 @@
                             text: 'Source of Calories'
                         },
                         tooltip: {
-                            pointFormat: '{series.name}: <b>            {point.percentage:.1f}%</b>'
+                            pointFormat: '{series.name}: <b>            {point.percentage:.1f}</b>'
                         },
                         plotOptions: {
                             pie: {
@@ -291,7 +298,7 @@
                                 cursor: 'pointer',
                                 dataLabels: {
                                     enabled: true,
-                                    format: '<b>{point.name}</  b>:           {point.percentage:.1f} %'
+                                    format: '<b>{point.name}</  b>:           {point.percentage:.1f} '
                                 }
                             }
                         },
@@ -313,10 +320,73 @@
                         }]
                     })
                 });
-                
+                callback()
 
             })
         }
+
+        function dailyIntake() {
+            $('#nutrition-column').append(`
+                <div id="dailyIntake" style=" margin: 0 auto"></div>
+            `)
+            const reducer = (accumulator, currentValue) => accumulator + currentValue;
+            sumSugar = (ttlSugar.reduce(reducer,0));
+            sumFat = (ttlFat.reduce(reducer,0));
+          
+            Highcharts.chart('dailyIntake', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Total Amount of Sugar and Saturated Fats'
+                },
+                subtitle: {
+                    text: 'Click the columns to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Total gram'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f}g'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
+                },
+                series: [
+                    {
+                        name: "Daily Consumption",
+                        colorByPoint: true,
+                        data: [
+                            {
+                                name: "Total Sugar",
+                                y: sumSugar,
+                            },
+                            {
+                                name: "Total Saturated Fat",
+                                y: sumFat,
+                            },
+                        ]
+                    }
+                ],
+
+});
+        }
+
         
         // saveRsltBtn.addEventListener('click', () => sentData(chosenConcepts))
         
