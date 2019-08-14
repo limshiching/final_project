@@ -6,6 +6,7 @@
 {% block content %}
 
 <html>
+
 	<head>
 		<meta charset="utf-8">
 		<title class=>Login</title>
@@ -27,12 +28,50 @@
 			<div style="padding: 2px"></div>
 
 			<li><a href=" {{ url_for('foods.new') }}"> I'd like to search about a particular food.
-			<div style="padding: 2px"></div>
-			<li><a href=" {{ url_for('images.new') }}"> I'd like to upload a picture of a meal I had today and get its nutritional breakdown. </a></li>
+					<div style="padding: 2px"></div>
+			<li><a href=" {{ url_for('images.new') }}"> I'd like to upload a picture of a meal I had today and get its
+					nutritional breakdown. </a></li>
 
-        </div>
 		</div>
+	</div>
+	</div>
+	{% else %}
+	<div class="login">
+		<h1 class="text-center">Existing Users</h1>
+		<div class="links">
+			<a href="{{ url_for('sessions.login') }}" class="active">Login</a>
+			<a href="{{ url_for('users.new') }}">Register</a>
 		</div>
+		<form action="{{ url_for('sessions.create') }}" method="POST">
+			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+			<label for="email">
+				<i class="fas fa-user"></i>
+			</label>
+			<input type="text" name="email" placeholder="email" required>
+			<label for="password">
+				<i class="fas fa-lock"></i>
+			</label>
+			<input type="password" name="password" placeholder="Password" id="password" required>
+
+			<div class="msg">{{ msg }}</div>
+			<input type="submit" value="Login">
+
+			<div id='social' style='text-align: center;'>
+				<hr>
+				<a href="{{url_for('users.google')}}" style='display:inline-block;padding-bottom:1.5vh;'><img
+						id='googlish' style="width:18vw; height: 5vh; object-fit: cover; border:2px solid black; "
+						src=" {{url_for('static', filename='google_button.png')}}"></a>
+				<br>
+
+				<a href="{{url_for('users.facebook')}}" style='display:inline-block;padding-bottom:1.5vh;'> <img
+						id='facebook' style="width: 18.2vw; height:5vh;"
+						src="{{url_for('static', filename='18928641_251957295286418_4362086450741641216_n.png')}}"></a>
+			</div>
+		</form>
+	</div>
+	{% endif %}
+</body>
+
 		{% else %}
 		
 		<div class="login">

@@ -16,19 +16,22 @@ oauth.register('google',
                api_base_url='https://www.googleapis.com/oauth2/v1/',
                client_kwargs={
                    'scope': ('https://www.googleapis.com/auth/userinfo.profile',
-                   'https://www.googleapis.com/auth/userinfo.email'),
+                             'https://www.googleapis.com/auth/userinfo.email'),
                    'token_endpoint_auth_method': 'client_secret_basic',
                    'token_placement': 'header',
                    'prompt': 'consent'
                }
                )
 
-oauth.register('facebook',
-    base_url='https://graph.facebook.com/',
-    request_token_url=None,
-    access_token_url='/oauth/access_token',
-    authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=os.getenv('FACEBOOK_APP_ID'),
-    consumer_secret=os.getenv('FACEBOOK_APP_SECRET'),
-    request_token_params={'scope': ('default', 'email')}
-)
+oauth.register(name="facebook",
+               client_id=os.getenv('Facebook_App_ID'),
+               client_secret=os.getenv('Facebook_App_Secret'),
+               request_token_url=None,
+               request_token_params=None,
+               access_token_url="https://graph.facebook.com/v2.10/oauth/access_token",
+               access_token_params=None,
+               refresh_token_url="https://graph.facebook.com/v2.10/oauth/refresh_token",
+               authorize_url="https://www.facebook.com/v2.10/dialog/oauth",
+               api_base_url="https://graph.facebook.com/v2.10",
+               client_kwargs={"scope": "email"}
+               )

@@ -3,23 +3,26 @@
 
 <div class="container">
     <div class="card-body">
-    <h2>Log In Here:</h2>
-<form action="{{ url_for('sessions.create') }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="text" name="email" class="form-control"/>
-    </div>
-    <div class="form-group">
-        <label for="password">Password:</label></br>
-        <input type="password" name="password"
-        class ="form-control" />
-    </div>
+        <h2>Log In Here:</h2>
+        <form action="{{ url_for('sessions.create') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" name="email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label></br>
+                <input type="password" name="password" class="form-control" />
+            </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-</div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <a href="{{url_for('users.google')}}"><img
+            src="{{url_for('static', filename='btn_google_signin_dark_normal_web.png')}}"></a>
 
-</form>
+    <a href="{{url_for('users.facebook')}}"><img
+            src="{{url_for('static', filename='18928641_251957295286418_4362086450741641216_n.png')}}"></a>
+    </form>
 </div>
 
 

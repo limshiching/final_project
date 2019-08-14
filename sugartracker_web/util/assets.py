@@ -19,6 +19,7 @@ bundles = {
         'css/images.css',
         'css/nutrition.css',
         'css/background.css',
+        'css/google.css',
         filters='cssmin',
         output='gen/home.%(version)s.css'),
 
